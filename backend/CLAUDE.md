@@ -17,7 +17,7 @@ A correção é feita por **script automatizado** que confere código HTTP, corp
 | [docs/arquitetura.md](docs/arquitetura.md) | Pacotes, camadas, SOLID, validação, erros, transações, testes |
 | [docs/infraestrutura.md](docs/infraestrutura.md) | Docker, env vars, CORS, logs, Swagger, lint, README e entrega |
 | [docs/barema-backend.md](docs/barema-backend.md) | Checklist de pontuação B1–B5 e eliminações |
-| [docs/fluxo-git.md](docs/fluxo-git.md) | Branches, Conventional Commits, commits atômicos, PRs e roteiro de PRs |
+| [docs/fluxo-git.md](docs/fluxo-git.md) | Conventional Commits, commits atômicos e ordem sugerida de commits |
 
 Se algo aqui divergir do enunciado original, **o enunciado prevalece** — corrija a doc.
 
@@ -80,21 +80,18 @@ Swagger UI: `http://localhost:8080/swagger-ui.html`.
 - Sem código comentado, sem código morto, sem `System.out`, sem números mágicos (constantes nomeadas).
 - Testes: calculadoras com `@ParameterizedTest` usando as tabelas do enunciado; integração com MockMvc +
   Testcontainers.
-## Git, commits e PRs (detalhes em `docs/fluxo-git.md`, idêntico no backend e no frontend)
+## Git e commits (detalhes em `docs/fluxo-git.md`, idêntico no backend e no frontend)
 
-- Nunca commitar direto na `main`: uma branch por funcionalidade, `<tipo>/<escopo>-<descricao>`
-  (ex.: `feat/players-registration`, `feat/players-table`, `fix/market-fee-rounding`).
+- Todos os commits direto na `main`, no repositório único da raiz. Um commit nunca mistura `backend/` e
+  `frontend/`.
 - Conventional Commits em português: `<tipo>(<escopo>): <descrição no imperativo>`, com `Refs: RNxx, Bxx, Fxx`
   quando atender regras ou itens do roteiro. Escopos de domínio: `players`, `clubs`, `market`, `league`;
   técnicos: `shared`, `db` (backend), `ui`, `api`, `layout` (frontend), `infra`, `docs`.
 - Mensagens genéricas ("fix", "update", "wip", "ajustes") são proibidas.
 - Commits **atômicos**: uma mudança lógica por commit, testes, lint e build verdes em cada um, teste junto do
-  código testado, sem misturar refatoração/formatação com funcionalidade, sem misturar backend e frontend.
-- PR por funcionalidade, título em Conventional Commits, corpo com regras/itens atendidos, como testar e
-  checklist.
-- Merge por rebase ou merge commit — **nunca squash** (o barema conta os commits de cada pasta).
-- Push pelo menos uma vez por dia; nunca `push --force` na `main`.
-- Só commitar/abrir PR quando o usuário pedir.
+  código testado, sem misturar refatoração/formatação com funcionalidade.
+- Push pelo menos uma vez por dia; nunca `push --force` nem reescrever commits enviados.
+- Só commitar ou dar push quando o usuário pedir.
 
 ## Contexto da entrega
 
