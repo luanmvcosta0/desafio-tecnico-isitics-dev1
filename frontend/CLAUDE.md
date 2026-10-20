@@ -17,7 +17,7 @@ ou nada. Também lê o código com rubrica (componentes, camada de API, formulá
 | [docs/arquitetura.md](docs/arquitetura.md)                 | Stack, pastas, camadas, componentes reutilizáveis, formulários, padrões |
 | [docs/infraestrutura.md](docs/infraestrutura.md)           | Versões, scripts, env, Docker, README e entrega                         |
 | [docs/barema-frontend.md](docs/barema-frontend.md)         | Checklist de pontuação F1–F5                                            |
-| [docs/fluxo-git.md](docs/fluxo-git.md)                     | Branches, Conventional Commits, commits atômicos, PRs e roteiro de PRs  |
+| [docs/fluxo-git.md](docs/fluxo-git.md)                     | Conventional Commits, commits atômicos e ordem sugerida de commits      |
 | `../backend/docs/contrato-api.md`                          | Contrato completo da API (fonte da verdade dos formatos)                |
 
 Se algo aqui divergir do enunciado original, **o enunciado prevalece** — corrija a doc.
@@ -77,21 +77,18 @@ npm run build          # tsc -b + vite build
   página).
 - Testes junto do código (`*.test.ts(x)`), com Testing Library e `fetch` mockado.
 
-## Git, commits e PRs (detalhes em `docs/fluxo-git.md`, idêntico no backend e no frontend)
+## Git e commits (detalhes em `docs/fluxo-git.md`, idêntico no backend e no frontend)
 
-- Nunca commitar direto na `main`: uma branch por funcionalidade, `<tipo>/<escopo>-<descricao>`
-  (ex.: `feat/players-registration`, `feat/players-table`, `fix/market-fee-rounding`).
+- Todos os commits direto na `main`, no repositório único da raiz. Um commit nunca mistura `backend/` e
+  `frontend/`.
 - Conventional Commits em português: `<tipo>(<escopo>): <descrição no imperativo>`, com `Refs: RNxx, Bxx, Fxx`
   quando atender regras ou itens do roteiro. Escopos de domínio: `players`, `clubs`, `market`, `league`;
   técnicos: `shared`, `db` (backend), `ui`, `api`, `layout` (frontend), `infra`, `docs`.
 - Mensagens genéricas ("fix", "update", "wip", "ajustes") são proibidas.
 - Commits **atômicos**: uma mudança lógica por commit, testes, lint e build verdes em cada um, teste junto do
-  código testado, sem misturar refatoração/formatação com funcionalidade, sem misturar backend e frontend.
-- PR por funcionalidade, título em Conventional Commits, corpo com regras/itens atendidos, como testar e
-  checklist.
-- Merge por rebase ou merge commit — **nunca squash** (o barema conta os commits de cada pasta).
-- Push pelo menos uma vez por dia; nunca `push --force` na `main`.
-- Só commitar/abrir PR quando o usuário pedir.
+  código testado, sem misturar refatoração/formatação com funcionalidade.
+- Push pelo menos uma vez por dia; nunca `push --force` nem reescrever commits enviados.
+- Só commitar ou dar push quando o usuário pedir.
 
 ## Contexto da entrega
 
