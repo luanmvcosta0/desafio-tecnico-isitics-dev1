@@ -14,12 +14,12 @@ Ao trabalhar numa parte, ler o `CLAUDE.md` dela antes.
 
 ## Git
 
-- Um único repositório, na raiz. Comandos de build/teste rodam dentro de cada pasta
-  (`cd backend && ./mvnw test`, `cd frontend && npm test`).
+- Um único repositório, na raiz; todos os commits direto na `main`. Comandos de build/teste rodam dentro de
+  cada pasta (`cd backend && ./mvnw test`, `cd frontend && npm test`).
 - **Um commit nunca mistura `backend/` e `frontend/`**: o barema conta commits por pasta.
-- Fluxo completo (branches, Conventional Commits, commits atômicos, PRs): `backend/docs/fluxo-git.md`
-  (idêntico a `frontend/docs/fluxo-git.md`).
-- Só commitar ou dar push quando o usuário pedir. Nunca `push --force` na `main`.
+- Conventional Commits e commits atômicos: `backend/docs/fluxo-git.md` (idêntico a
+  `frontend/docs/fluxo-git.md`).
+- Só commitar ou dar push quando o usuário pedir. Nunca `push --force`.
 
 ## Raiz (a criar)
 
