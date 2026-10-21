@@ -54,7 +54,7 @@ export function LineupForm({ clubId, squad, lineup, onSaved }: LineupFormProps) 
     return squad
       .filter(
         (player) =>
-          formationSlots[formation][slotIndex].positions.includes(player.position) &&
+          slots[slotIndex].positions.includes(player.position) &&
           player.condition !== 'DOENTE' &&
           !chosenElsewhere.includes(String(player.id)),
       )
