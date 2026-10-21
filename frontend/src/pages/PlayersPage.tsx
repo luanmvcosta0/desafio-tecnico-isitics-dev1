@@ -6,6 +6,7 @@ import { ConfirmDialog } from '../components/ui/ConfirmDialog'
 import { Modal } from '../components/ui/Modal'
 import { Pagination } from '../components/ui/Pagination'
 import { useClubs } from '../features/clubs/useClubs'
+import { PurchaseDialog } from '../features/market/PurchaseDialog'
 import { ConditionForm } from '../features/players/ConditionForm'
 import { PlayerCreateForm } from '../features/players/PlayerCreateForm'
 import { PlayerEditForm } from '../features/players/PlayerEditForm'
@@ -18,7 +19,8 @@ import { useMutation } from '../hooks/useMutation'
 import { deletePlayer } from '../services/api/playersApi'
 import type { Player, PlayerFilters } from '../types/player'
 
-type Dialog = { type: 'edit' | 'condition' | 'delete'; player: Player } | null
+type DialogType = 'edit' | 'condition' | 'delete' | 'buy'
+type Dialog = { type: DialogType; player: Player } | null
 
 export function PlayersPage() {
   const [page, setPage] = useState(1)
@@ -56,7 +58,7 @@ export function PlayersPage() {
     setCreatedPlayer(player)
   }
 
-  function openDialog(type: 'edit' | 'condition' | 'delete', player: Player) {
+  function openDialog(type: DialogType, player: Player) {
     removal.reset()
     setNotice(null)
     setDialog({ type, player })
@@ -112,6 +114,7 @@ export function PlayersPage() {
           onEdit={(player) => openDialog('edit', player)}
           onChangeCondition={(player) => openDialog('condition', player)}
           onDelete={(player) => openDialog('delete', player)}
+          onBuy={(player) => openDialog('buy', player)}
         />
         {players.data && (
           <Pagination
@@ -139,6 +142,17 @@ export function PlayersPage() {
             onCancel={closeDialog}
           />
         </Modal>
+      )}
+      {dialog?.type === 'buy' && (
+        <PurchaseDialog
+          player={dialog.player}
+          clubs={clubs.data ?? []}
+          onPurchased={() => {
+            players.reload()
+            clubs.reload()
+          }}
+          onClose={closeDialog}
+        />
       )}
       {dialog?.type === 'delete' && (
         <ConfirmDialog

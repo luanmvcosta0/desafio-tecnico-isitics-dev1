@@ -13,6 +13,7 @@ interface PlayerTableProps {
   onEdit: (player: Player) => void
   onChangeCondition: (player: Player) => void
   onDelete: (player: Player) => void
+  onBuy: (player: Player) => void
 }
 
 export function PlayerTable({
@@ -24,6 +25,7 @@ export function PlayerTable({
   onEdit,
   onChangeCondition,
   onDelete,
+  onBuy,
 }: PlayerTableProps) {
   const columns: Column<Player>[] = [
     { header: 'Nome', render: (player) => <span className="font-medium">{player.name}</span> },
@@ -65,6 +67,11 @@ export function PlayerTable({
           >
             Condição
           </Button>
+          {player.club_id === null && (
+            <Button onClick={() => onBuy(player)} aria-label={`Comprar ${player.name}`}>
+              Comprar
+            </Button>
+          )}
           {player.club_id === null && (
             <Button
               variant="secondary"

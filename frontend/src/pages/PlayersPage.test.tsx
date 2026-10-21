@@ -253,4 +253,52 @@ describe('PlayersPage', () => {
       'O parâmetro min_age não pode ser maior que max_age.',
     )
   })
+
+  it('buys a free player and shows the club in the table afterwards', async () => {
+    let bought = false
+    mockApi({
+      'GET /clubs': () =>
+        jsonResponse(200, [
+          { id: 1, name: 'Águias FC', acronym: 'AGU', cash: 300, squad_value: 0, net_worth: 300 },
+        ]),
+      'GET /players': () => jsonResponse(200, aPage([aPlayer({ club_id: bought ? 1 : null })])),
+      'POST /players/2/buy': () => {
+        bought = true
+        return jsonResponse(200, {
+          id: 1,
+          club_id: 1,
+          player_id: 2,
+          player_name: 'Meia Lua',
+          type: 'COMPRA',
+          value: 40,
+          fee: 2,
+          penalty: 0,
+          profit: null,
+          cash_change: -42,
+          created_at: '2026-11-02T10:15:00-03:00',
+          contract: {
+            purchase_value: 40,
+            loyalty_until: '2027-03-02T10:15:00-03:00',
+            status: 'ATIVO',
+          },
+          club_cash: 258,
+        })
+      },
+    })
+    const user = renderPage()
+    await user.click(await screen.findByRole('button', { name: 'Comprar Meia Lua' }))
+
+    const dialog = within(screen.getByRole('dialog', { name: 'Comprar Meia Lua' }))
+    await user.selectOptions(dialog.getByLabelText('Clube comprador'), '1')
+    await user.type(
+      dialog.getByLabelText('Fim da fidelidade (horário de Brasília)'),
+      '2027-03-02T10:15',
+    )
+    await user.click(dialog.getByRole('button', { name: 'Confirmar compra' }))
+    await user.click(await dialog.findByRole('button', { name: 'Fechar' }))
+
+    expect(await within(rowOf('Meia Lua')).findByText('AGU')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Comprar Meia Lua' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Excluir Meia Lua' })).not.toBeInTheDocument()
+  })
 })
