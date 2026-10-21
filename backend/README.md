@@ -140,7 +140,7 @@ Nenhuma.
 
 ## 8. Uso de inteligência artificial
 
-Ver a seção "Uso de inteligência artificial" do [README da raiz](../README.md#uso-de-inteligência-artificial).
+Ver a seção "Uso de inteligência artificial" do [README da raiz](../README.md#8-uso-de-inteligência-artificial).
 
 ## Comandos dos diferenciais
 
