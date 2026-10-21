@@ -183,4 +183,22 @@ class MatchIntegrationTest extends PostgresIntegrationTest {
     mockMvc.perform(get("/api/v1/matches/1")).andExpect(status().isNotFound());
   }
 
+  @Test
+  void listsMostRecentFirstWithClubFilterAndWithoutDuels() throws Exception {
+    play("{\"home_club_id\": 1, \"away_club_id\": 2}");
+    play("{\"home_club_id\": 2, \"away_club_id\": 1}");
+
+    mockMvc
+        .perform(get("/api/v1/matches"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$[*].id", contains(2, 1)))
+        .andExpect(jsonPath("$[0].duels").doesNotExist())
+        .andExpect(jsonPath("$[0].home.club_name").value("Delta FC"));
+    mockMvc.perform(get("/api/v1/matches?club_id=3")).andExpect(jsonPath("$").isEmpty());
+    mockMvc.perform(get("/api/v1/matches?club_id=1")).andExpect(jsonPath("$.length()").value(2));
+    mockMvc.perform(get("/api/v1/matches?club_id=9")).andExpect(status().isNotFound());
+    mockMvc.perform(get("/api/v1/matches?club_id=abc")).andExpect(status().isBadRequest());
+    mockMvc.perform(get("/api/v1/matches?club_id=")).andExpect(status().isBadRequest());
+  }
+
 }

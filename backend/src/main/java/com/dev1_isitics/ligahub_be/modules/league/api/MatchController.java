@@ -6,6 +6,7 @@ import com.dev1_isitics.ligahub_be.modules.league.application.PlayedMatch;
 import com.dev1_isitics.ligahub_be.shared.web.PathIds;
 import jakarta.validation.Valid;
 import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,13 @@ public class MatchController {
     PlayedMatch played = matchService.play(request.homeClubId(), request.awayClubId());
     return ResponseEntity.created(URI.create(MATCHES_PATH + "/" + played.match().getId()))
         .body(MatchResponse.withDuels(played));
+  }
+
+  @GetMapping(MATCHES_PATH)
+  public List<MatchResponse> history(MatchClubFilter filter) {
+    return matchQueryService.history(filter.clubId()).stream()
+        .map(MatchResponse::withoutDuels)
+        .toList();
   }
 
   @GetMapping(MATCHES_PATH + "/" + PathIds.ID)
