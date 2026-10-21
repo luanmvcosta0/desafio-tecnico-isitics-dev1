@@ -39,4 +39,13 @@ public class Club {
   @CreationTimestamp
   @Column(name = "criado_em", nullable = false, updatable = false)
   private Instant createdAt;
+
+  /** A new club starts with 300,00 in cash, no players and no lineup (RN10). */
+  public static Club found(String name, String acronym) {
+    Club club = new Club();
+    club.name = name;
+    club.acronym = acronym;
+    club.cash = ClubLimits.INITIAL_CASH;
+    return club;
+  }
 }
