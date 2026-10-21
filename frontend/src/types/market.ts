@@ -31,3 +31,21 @@ export interface SaleResult extends Transaction {
   contract_status: 'ENCERRADO' | 'RESCINDIDO'
   club_cash: number
 }
+
+export interface TransactionSummary {
+  total_spent: number
+  total_received: number
+  total_fees: number
+  total_penalties: number
+  total_profit: number
+}
+
+export interface TransactionHistory {
+  data: Transaction[]
+  summary: TransactionSummary
+}
+
+export interface TransactionFilters {
+  types: TransactionType[]
+  player_id: string
+}
