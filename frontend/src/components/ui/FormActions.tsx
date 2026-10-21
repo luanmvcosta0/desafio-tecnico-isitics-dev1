@@ -6,6 +6,7 @@ interface FormActionsProps {
   isSubmitting: boolean
   errorMessage: string | null
   onCancel: () => void
+  cancelLabel?: string
 }
 
 /** API refusal message plus the cancel and submit buttons of every form. */
@@ -14,13 +15,14 @@ export function FormActions({
   isSubmitting,
   errorMessage,
   onCancel,
+  cancelLabel = 'Cancelar',
 }: FormActionsProps) {
   return (
     <>
       {errorMessage && <Alert variant="error">{errorMessage}</Alert>}
       <div className="flex flex-wrap justify-end gap-2">
         <Button variant="secondary" onClick={onCancel} disabled={isSubmitting}>
-          Cancelar
+          {cancelLabel}
         </Button>
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? 'Salvando…' : submitLabel}
