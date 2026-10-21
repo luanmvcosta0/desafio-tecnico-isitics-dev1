@@ -201,4 +201,21 @@ class MatchIntegrationTest extends PostgresIntegrationTest {
     mockMvc.perform(get("/api/v1/matches?club_id=")).andExpect(status().isBadRequest());
   }
 
+  @Test
+  void ranksEveryClubInTheStandings() throws Exception {
+    play("{\"home_club_id\": 1, \"away_club_id\": 2}");
+
+    mockMvc
+        .perform(get("/api/v1/standings"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$[*].club_name", contains("Delta FC", "Mangue FC", "Águias FC")))
+        .andExpect(jsonPath("$[*].position", contains(1, 2, 3)))
+        .andExpect(jsonPath("$[0].points").value(3))
+        .andExpect(jsonPath("$[0].played").value(1))
+        .andExpect(jsonPath("$[0].goals_for").value(2))
+        .andExpect(jsonPath("$[0].goals_against").value(1))
+        .andExpect(jsonPath("$[0].goal_difference").value(1))
+        .andExpect(jsonPath("$[1].played").value(0))
+        .andExpect(jsonPath("$[2].losses").value(1));
+  }
 }

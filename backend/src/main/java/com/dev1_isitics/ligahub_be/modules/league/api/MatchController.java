@@ -43,4 +43,8 @@ public class MatchController {
     return MatchResponse.withDuels(matchQueryService.find(id));
   }
 
+  @GetMapping("/api/v1/standings")
+  public List<StandingResponse> standings() {
+    return matchQueryService.standings().stream().map(StandingResponse::from).toList();
+  }
 }
