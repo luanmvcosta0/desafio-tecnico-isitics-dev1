@@ -37,3 +37,20 @@ export interface PlayerCreateInput {
   physical: number
   potential: number
 }
+
+export interface PlayerUpdateInput {
+  name: string
+  position: Position
+  agility: number
+  age: number
+}
+
+export interface PaginatedPlayers {
+  data: Player[]
+  meta: { page: number; limit: number; total_items: number; total_pages: number }
+}
+
+export interface PlayerListParams {
+  page: number
+  limit: number
+}
