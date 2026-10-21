@@ -3,16 +3,26 @@ import { Link, useParams } from 'react-router'
 import { routes } from '../app/routes'
 import { PageHeader } from '../components/layout/PageHeader'
 import { SummaryList } from '../components/ui/SummaryList'
+import { Tabs, type Tab } from '../components/ui/Tabs'
 import { SquadTable } from '../features/clubs/SquadTable'
 import { useClub } from '../features/clubs/useClub'
 import { SaleDialog } from '../features/market/SaleDialog'
+import { TransactionHistorySection } from '../features/transactions/TransactionHistorySection'
 import type { SquadPlayer } from '../types/club'
 import { formatMoney } from '../utils/format'
+
+type ClubTab = 'squad' | 'history'
+
+const clubTabs: Tab<ClubTab>[] = [
+  { id: 'squad', label: 'Elenco' },
+  { id: 'history', label: 'Histórico de transações' },
+]
 
 export function ClubDetailsPage() {
   const { clubId = '' } = useParams()
   const club = useClub(clubId)
   const [selling, setSelling] = useState<SquadPlayer | null>(null)
+  const [tab, setTab] = useState<ClubTab>('squad')
 
   return (
     <>
@@ -38,14 +48,19 @@ export function ClubDetailsPage() {
             />
           </section>
         )}
-        <h2 className="text-lg font-semibold">Elenco</h2>
-        <SquadTable
-          players={club.data?.players ?? null}
-          isLoading={club.isLoading}
-          error={club.error}
-          onRetry={club.reload}
-          onSell={setSelling}
-        />
+        <Tabs label="Seções do clube" tabs={clubTabs} active={tab} onChange={setTab}>
+          {tab === 'squad' ? (
+            <SquadTable
+              players={club.data?.players ?? null}
+              isLoading={club.isLoading}
+              error={club.error}
+              onRetry={club.reload}
+              onSell={setSelling}
+            />
+          ) : (
+            <TransactionHistorySection clubId={clubId} />
+          )}
+        </Tabs>
       </div>
       {selling && (
         <SaleDialog player={selling} onSold={club.reload} onClose={() => setSelling(null)} />

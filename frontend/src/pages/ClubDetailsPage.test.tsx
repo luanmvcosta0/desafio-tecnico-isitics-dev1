@@ -134,4 +134,32 @@ describe('ClubDetailsPage', () => {
 
     expect(await screen.findByRole('alert')).toHaveTextContent('Clube 9 não encontrado.')
   })
+
+  it('opens the transaction history in its own tab', async () => {
+    mockApi({
+      'GET /clubs/1': () => jsonResponse(200, club),
+      'GET /clubs/1/transactions': () =>
+        jsonResponse(200, {
+          data: [sale],
+          summary: {
+            total_spent: 0,
+            total_received: 35.7,
+            total_fees: 0.3,
+            total_penalties: 4,
+            total_profit: 3,
+          },
+        }),
+    })
+    const user = renderAt('/clubs/1')
+    await screen.findByRole('button', { name: 'Vender Meia Lua' })
+
+    await user.click(screen.getByRole('tab', { name: 'Histórico de transações' }))
+
+    expect(screen.getByRole('tab', { name: 'Histórico de transações' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    )
+    expect(await screen.findByRole('cell', { name: 'Venda' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Vender Meia Lua' })).not.toBeInTheDocument()
+  })
 })
