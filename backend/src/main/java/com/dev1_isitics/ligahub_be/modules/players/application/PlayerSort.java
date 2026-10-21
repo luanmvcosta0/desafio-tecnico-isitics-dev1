@@ -22,6 +22,9 @@ public enum PlayerSort {
   public static final Comparator<Player> TIE_BREAK =
       NAME.comparator.thenComparing(Player::getId);
 
+  /** Squad order (RN11): position GOL, ZAG, LAT, MEI, ATA, then name, then id. */
+  public static final Comparator<Player> SQUAD_ORDER = POSITION.comparator.thenComparing(TIE_BREAK);
+
   private final String parameter;
   private final String field;
   private final Comparator<Player> comparator;
