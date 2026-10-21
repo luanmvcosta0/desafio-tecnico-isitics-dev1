@@ -111,6 +111,11 @@ public class Player {
     this.deletedAt = deletedAt;
   }
 
+  /** The club changes only by purchases and sales (RN12, RN16). */
+  public void joinClub(Integer clubId) {
+    this.clubId = clubId;
+  }
+
   public boolean isFree() {
     return clubId == null;
   }

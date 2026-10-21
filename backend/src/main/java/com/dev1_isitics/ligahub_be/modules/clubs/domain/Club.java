@@ -48,4 +48,9 @@ public class Club {
     club.cash = ClubLimits.INITIAL_CASH;
     return club;
   }
+
+  /** The cash changes only by purchases and sales (RN10). */
+  public void changeCash(BigDecimal amount) {
+    cash = cash.add(amount);
+  }
 }
