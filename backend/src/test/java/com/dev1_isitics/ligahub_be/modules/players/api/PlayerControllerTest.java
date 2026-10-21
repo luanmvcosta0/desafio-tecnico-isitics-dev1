@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.dev1_isitics.ligahub_be.modules.players.application.PlayerQueryService;
 import com.dev1_isitics.ligahub_be.modules.players.application.PlayerService;
 import com.dev1_isitics.ligahub_be.modules.players.domain.Player;
 import com.dev1_isitics.ligahub_be.modules.players.domain.Position;
@@ -50,6 +51,8 @@ class PlayerControllerTest {
   @Autowired private MockMvc mockMvc;
 
   @MockitoBean private PlayerService playerService;
+
+  @MockitoBean private PlayerQueryService playerQueryService;
 
   private static Player savedPlayer() {
     Player player =
@@ -230,5 +233,15 @@ class PlayerControllerTest {
         .andExpect(content().string(""));
 
     verify(playerService).delete(2);
+  }
+
+  @Test
+  void rejectsInvalidQueryParamWithoutListing() throws Exception {
+    mockMvc
+        .perform(get("/api/v1/players").param("sort", "POSITION"))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").isNotEmpty());
+
+    verify(playerQueryService, never()).list(any());
   }
 }

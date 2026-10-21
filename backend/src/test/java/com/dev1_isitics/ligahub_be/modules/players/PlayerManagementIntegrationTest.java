@@ -119,6 +119,10 @@ class PlayerManagementIntegrationTest extends PostgresIntegrationTest {
     changeCondition("DOENTE").andExpect(status().isNotFound());
     edit(playerId, "{\"name\": \"Meia Lua\", \"position\": \"MEI\", \"agility\": 50, \"age\": 25}")
         .andExpect(status().isNotFound());
+    mockMvc
+        .perform(get("/api/v1/players"))
+        .andExpect(jsonPath("$.data").isEmpty())
+        .andExpect(jsonPath("$.meta.total_items").value(0));
   }
 
   @Test

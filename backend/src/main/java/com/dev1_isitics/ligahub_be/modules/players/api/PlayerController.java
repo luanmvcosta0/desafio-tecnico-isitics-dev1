@@ -1,5 +1,7 @@
 package com.dev1_isitics.ligahub_be.modules.players.api;
 
+import com.dev1_isitics.ligahub_be.modules.players.application.PlayerListQuery;
+import com.dev1_isitics.ligahub_be.modules.players.application.PlayerQueryService;
 import com.dev1_isitics.ligahub_be.modules.players.application.PlayerService;
 import com.dev1_isitics.ligahub_be.modules.players.domain.Player;
 import com.dev1_isitics.ligahub_be.shared.web.PathIds;
@@ -25,6 +27,12 @@ public class PlayerController {
   static final String PLAYERS_PATH = "/api/v1/players";
 
   private final PlayerService playerService;
+  private final PlayerQueryService playerQueryService;
+
+  @GetMapping
+  public PlayerListResponse list(PlayerListQuery query) {
+    return PlayerListResponse.from(playerQueryService.list(query));
+  }
 
   @PostMapping
   public ResponseEntity<PlayerResponse> register(@Valid @RequestBody PlayerCreateRequest request) {
