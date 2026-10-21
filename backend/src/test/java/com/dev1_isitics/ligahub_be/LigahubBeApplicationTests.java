@@ -1,13 +1,10 @@
 package com.dev1_isitics.ligahub_be;
 
+import com.dev1_isitics.ligahub_be.support.PostgresIntegrationTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class LigahubBeApplicationTests {
+class LigahubBeApplicationTests extends PostgresIntegrationTest {
 
-	@Test
-	void contextLoads() {
-	}
-
+  @Test
+  void contextLoads() {}
 }
