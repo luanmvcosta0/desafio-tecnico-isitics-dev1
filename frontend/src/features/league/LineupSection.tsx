@@ -3,15 +3,13 @@ import { Alert } from '../../components/ui/Alert'
 import { DataTable, type Column } from '../../components/ui/DataTable'
 import type { Lineup } from '../../types/league'
 import type { Player } from '../../types/player'
-import { conditionLabels, positionLabels } from '../players/playerLabels'
+import { conditionLabels } from '../players/playerLabels'
+import { PositionCode } from '../players/PositionCode'
 import { LineupForm } from './LineupForm'
 import { useLineup } from './useLineup'
 
 const columns: Column<Player>[] = [
-  {
-    header: 'Posição',
-    render: (player) => <abbr title={positionLabels[player.position]}>{player.position}</abbr>,
-  },
+  { header: 'Posição', render: (player) => <PositionCode position={player.position} /> },
   { header: 'Titular', render: (player) => <span className="font-medium">{player.name}</span> },
   { header: 'Overall', render: (player) => player.overall },
   { header: 'Condição', render: (player) => conditionLabels[player.condition] },

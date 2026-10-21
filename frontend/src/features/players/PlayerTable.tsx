@@ -2,7 +2,8 @@ import { Button } from '../../components/ui/Button'
 import { DataTable, type Column } from '../../components/ui/DataTable'
 import type { Player } from '../../types/player'
 import { formatMoney } from '../../utils/format'
-import { conditionLabels, FREE_PLAYER_LABEL, positionLabels } from './playerLabels'
+import { conditionLabels, FREE_PLAYER_LABEL } from './playerLabels'
+import { PositionCode } from './PositionCode'
 
 interface PlayerTableProps {
   players: Player[] | null
@@ -29,10 +30,7 @@ export function PlayerTable({
 }: PlayerTableProps) {
   const columns: Column<Player>[] = [
     { header: 'Nome', render: (player) => <span className="font-medium">{player.name}</span> },
-    {
-      header: 'Posição',
-      render: (player) => <abbr title={positionLabels[player.position]}>{player.position}</abbr>,
-    },
+    { header: 'Posição', render: (player) => <PositionCode position={player.position} /> },
     { header: 'Overall', render: (player) => player.overall },
     { header: 'Agilidade', render: (player) => player.agility },
     { header: 'Idade', render: (player) => player.age },

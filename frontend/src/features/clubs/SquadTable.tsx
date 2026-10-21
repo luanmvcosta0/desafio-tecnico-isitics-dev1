@@ -2,7 +2,8 @@ import { Button } from '../../components/ui/Button'
 import { DataTable, type Column } from '../../components/ui/DataTable'
 import type { SquadPlayer } from '../../types/club'
 import { formatDateTime, formatMoney } from '../../utils/format'
-import { conditionLabels, positionLabels } from '../players/playerLabels'
+import { conditionLabels } from '../players/playerLabels'
+import { PositionCode } from '../players/PositionCode'
 
 const NO_CONTRACT = '—'
 
@@ -17,10 +18,7 @@ interface SquadTableProps {
 export function SquadTable({ players, isLoading, error, onRetry, onSell }: SquadTableProps) {
   const columns: Column<SquadPlayer>[] = [
     { header: 'Nome', render: (player) => <span className="font-medium">{player.name}</span> },
-    {
-      header: 'Posição',
-      render: (player) => <abbr title={positionLabels[player.position]}>{player.position}</abbr>,
-    },
+    { header: 'Posição', render: (player) => <PositionCode position={player.position} /> },
     { header: 'Overall', render: (player) => player.overall },
     { header: 'Condição', render: (player) => conditionLabels[player.condition] },
     { header: 'Valor de mercado', render: (player) => formatMoney(player.market_value) },
