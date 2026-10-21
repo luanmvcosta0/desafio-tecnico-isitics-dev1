@@ -2,6 +2,7 @@ package com.dev1_isitics.ligahub_be.modules.market.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,5 +30,18 @@ class LoyaltyPenaltyCalculatorTest {
 
     assertThat(remainingDays).isEqualTo(expectedDays);
     assertThat(LoyaltyPenaltyCalculator.penaltyRate(remainingDays)).isEqualTo(expectedRate);
+  }
+
+  @ParameterizedTest(name = "{0} × {1}% -> {2}")
+  @CsvSource({
+    "40.00, 10, 4.00",
+    "42.50, 20, 8.50",
+    "30.00, 5, 1.50",
+    "25.00, 0, 0.00",
+    "75.00, 20, 10.00",
+    "8.79, 5, 0.44"
+  })
+  void computesThePenaltyCappedAtTen(BigDecimal value, int rate, BigDecimal expected) {
+    assertThat(LoyaltyPenaltyCalculator.penalty(value, rate)).isEqualTo(expected);
   }
 }
