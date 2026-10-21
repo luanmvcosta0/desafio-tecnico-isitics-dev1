@@ -8,7 +8,7 @@ Este é o repositório de entrega: um único git na raiz, com as pastas exigidas
 | Pasta | Stack | Documentação |
 | --- | --- | --- |
 | `backend/` | Java 21, Spring Boot 3, PostgreSQL 16, Flyway | `backend/CLAUDE.md` e `backend/docs/` |
-| `frontend/` | React 19, Vite, TypeScript, Tailwind v4, React Router (modo biblioteca) | `frontend/CLAUDE.md` e `frontend/docs/` |
+| `frontend/` | React 19, Vite, TypeScript, Tailwind v4, React Router (modo Declarative) | `frontend/CLAUDE.md` e `frontend/docs/` |
 
 Ao trabalhar numa parte, ler o `CLAUDE.md` dela antes.
 
