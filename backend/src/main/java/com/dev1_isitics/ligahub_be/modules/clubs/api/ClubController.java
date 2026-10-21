@@ -3,7 +3,6 @@ package com.dev1_isitics.ligahub_be.modules.clubs.api;
 import com.dev1_isitics.ligahub_be.modules.clubs.application.ClubQueryService;
 import com.dev1_isitics.ligahub_be.modules.clubs.application.ClubService;
 import com.dev1_isitics.ligahub_be.modules.clubs.application.ClubSort;
-import com.dev1_isitics.ligahub_be.modules.clubs.domain.Club;
 import com.dev1_isitics.ligahub_be.modules.clubs.domain.ClubValuation;
 import com.dev1_isitics.ligahub_be.shared.web.PathIds;
 import jakarta.validation.Valid;
@@ -35,9 +34,9 @@ public class ClubController {
 
   @PostMapping
   public ResponseEntity<ClubResponse> create(@Valid @RequestBody ClubCreateRequest request) {
-    Club club = clubService.create(request);
-    return ResponseEntity.created(URI.create(CLUBS_PATH + "/" + club.getId()))
-        .body(ClubResponse.from(ClubValuation.of(club, List.of())));
+    ClubValuation created = clubService.create(request);
+    return ResponseEntity.created(URI.create(CLUBS_PATH + "/" + created.club().getId()))
+        .body(ClubResponse.from(created));
   }
 
   @GetMapping("/" + PathIds.ID)

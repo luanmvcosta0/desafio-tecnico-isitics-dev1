@@ -3,8 +3,10 @@ package com.dev1_isitics.ligahub_be.modules.clubs.application;
 import com.dev1_isitics.ligahub_be.modules.clubs.api.ClubCreateRequest;
 import com.dev1_isitics.ligahub_be.modules.clubs.domain.Club;
 import com.dev1_isitics.ligahub_be.modules.clubs.domain.ClubLimits;
+import com.dev1_isitics.ligahub_be.modules.clubs.domain.ClubValuation;
 import com.dev1_isitics.ligahub_be.modules.clubs.infrastructure.ClubRepository;
 import com.dev1_isitics.ligahub_be.shared.exception.BusinessRuleException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +22,9 @@ public class ClubService {
 
   private final ClubRepository clubRepository;
 
+  /** A new club has no players yet, so its net worth is its initial cash. */
   @Transactional
-  public Club create(ClubCreateRequest request) {
+  public ClubValuation create(ClubCreateRequest request) {
     if (clubRepository.count() >= ClubLimits.MAX_CLUBS) {
       throw new BusinessRuleException(CLUB_LIMIT_MESSAGE);
     }
@@ -31,6 +34,7 @@ public class ClubService {
     if (clubRepository.existsByAcronym(request.acronym())) {
       throw new BusinessRuleException(ACRONYM_TAKEN_MESSAGE.formatted(request.acronym()));
     }
-    return clubRepository.save(Club.found(request.name(), request.acronym()));
+    Club club = clubRepository.save(Club.found(request.name(), request.acronym()));
+    return ClubValuation.of(club, List.of());
   }
 }
