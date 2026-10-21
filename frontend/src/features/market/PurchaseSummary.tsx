@@ -1,3 +1,4 @@
+import { SummaryList } from '../../components/ui/SummaryList'
 import type { PurchaseResult } from '../../types/market'
 import { formatDateTime, formatMoney } from '../../utils/format'
 
@@ -15,14 +16,5 @@ export function PurchaseSummary({ result }: PurchaseSummaryProps) {
     { label: 'Novo caixa', value: formatMoney(result.club_cash) },
   ]
 
-  return (
-    <dl aria-label="Resultado da compra" className="grid grid-cols-2 gap-3">
-      {items.map((item) => (
-        <div key={item.label}>
-          <dt className="text-xs text-slate-500">{item.label}</dt>
-          <dd className="font-medium">{item.value}</dd>
-        </div>
-      ))}
-    </dl>
-  )
+  return <SummaryList label="Resultado da compra" items={items} columnsClassName="grid-cols-2" />
 }

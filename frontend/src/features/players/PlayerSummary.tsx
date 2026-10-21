@@ -1,3 +1,4 @@
+import { SummaryList } from '../../components/ui/SummaryList'
 import type { Player } from '../../types/player'
 import { formatMoney } from '../../utils/format'
 import { conditionLabels, FREE_PLAYER_LABEL, positionLabels } from './playerLabels'
@@ -22,15 +23,12 @@ export function PlayerSummary({ player }: PlayerSummaryProps) {
       aria-label={`Resumo de ${player.name}`}
       className="rounded-xl border border-slate-200 p-4"
     >
-      <h2 className="font-semibold">{player.name}</h2>
-      <dl className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        {items.map((item) => (
-          <div key={item.label}>
-            <dt className="text-xs text-slate-500">{item.label}</dt>
-            <dd className="font-medium">{item.value}</dd>
-          </div>
-        ))}
-      </dl>
+      <h2 className="mb-3 font-semibold">{player.name}</h2>
+      <SummaryList
+        label={`Valores de ${player.name}`}
+        items={items}
+        columnsClassName="grid-cols-2 sm:grid-cols-3 lg:grid-cols-6"
+      />
     </section>
   )
 }
