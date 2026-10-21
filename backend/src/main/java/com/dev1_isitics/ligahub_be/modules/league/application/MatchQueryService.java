@@ -1,6 +1,7 @@
 package com.dev1_isitics.ligahub_be.modules.league.application;
 
 import com.dev1_isitics.ligahub_be.modules.clubs.domain.Club;
+import com.dev1_isitics.ligahub_be.modules.clubs.domain.ClubNotFoundException;
 import com.dev1_isitics.ligahub_be.modules.clubs.infrastructure.ClubRepository;
 import com.dev1_isitics.ligahub_be.modules.league.domain.Match;
 import com.dev1_isitics.ligahub_be.modules.league.domain.Standing;
@@ -21,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MatchQueryService {
 
-  private static final String CLUB_NOT_FOUND_MESSAGE = "Clube %d não encontrado.";
   private static final String MATCH_NOT_FOUND_MESSAGE = "Partida %d não encontrada.";
 
   private final ClubRepository clubRepository;
@@ -31,7 +31,7 @@ public class MatchQueryService {
   @Transactional(readOnly = true)
   public List<PlayedMatch> history(Integer clubId) {
     if (clubId != null && !clubRepository.existsById(clubId)) {
-      throw new ResourceNotFoundException(CLUB_NOT_FOUND_MESSAGE.formatted(clubId));
+      throw new ClubNotFoundException(clubId);
     }
     List<Match> matches =
         clubId == null

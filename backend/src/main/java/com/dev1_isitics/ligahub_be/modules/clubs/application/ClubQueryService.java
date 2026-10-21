@@ -1,6 +1,7 @@
 package com.dev1_isitics.ligahub_be.modules.clubs.application;
 
 import com.dev1_isitics.ligahub_be.modules.clubs.domain.Club;
+import com.dev1_isitics.ligahub_be.modules.clubs.domain.ClubNotFoundException;
 import com.dev1_isitics.ligahub_be.modules.clubs.domain.ClubValuation;
 import com.dev1_isitics.ligahub_be.modules.clubs.infrastructure.ClubRepository;
 import com.dev1_isitics.ligahub_be.modules.market.domain.Contract;
@@ -10,7 +11,6 @@ import com.dev1_isitics.ligahub_be.modules.market.infrastructure.ContractReposit
 import com.dev1_isitics.ligahub_be.modules.players.application.PlayerSort;
 import com.dev1_isitics.ligahub_be.modules.players.domain.Player;
 import com.dev1_isitics.ligahub_be.modules.players.infrastructure.PlayerRepository;
-import com.dev1_isitics.ligahub_be.shared.exception.ResourceNotFoundException;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
@@ -25,8 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class ClubQueryService {
-
-  private static final String CLUB_NOT_FOUND_MESSAGE = "Clube %d não encontrado.";
 
   private final ClubRepository clubRepository;
   private final PlayerRepository playerRepository;
@@ -49,10 +47,7 @@ public class ClubQueryService {
 
   @Transactional(readOnly = true)
   public ClubDetails find(Integer id) {
-    Club club =
-        clubRepository
-            .findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException(CLUB_NOT_FOUND_MESSAGE.formatted(id)));
+    Club club = clubRepository.findById(id).orElseThrow(() -> new ClubNotFoundException(id));
     ClubValuation valuation =
         valuate(club, playerRepository.findByClubIdInAndDeletedAtIsNull(List.of(id)));
     Map<Integer, Contract> contracts =

@@ -1,6 +1,7 @@
 package com.dev1_isitics.ligahub_be.modules.league.application;
 
 import com.dev1_isitics.ligahub_be.modules.clubs.domain.Club;
+import com.dev1_isitics.ligahub_be.modules.clubs.domain.ClubNotFoundException;
 import com.dev1_isitics.ligahub_be.modules.clubs.infrastructure.ClubRepository;
 import com.dev1_isitics.ligahub_be.modules.league.domain.DuelResult;
 import com.dev1_isitics.ligahub_be.modules.league.domain.Match;
@@ -10,7 +11,6 @@ import com.dev1_isitics.ligahub_be.modules.league.domain.TeamSheet;
 import com.dev1_isitics.ligahub_be.modules.league.infrastructure.MatchDuelRepository;
 import com.dev1_isitics.ligahub_be.modules.league.infrastructure.MatchRepository;
 import com.dev1_isitics.ligahub_be.shared.exception.BusinessRuleException;
-import com.dev1_isitics.ligahub_be.shared.exception.ResourceNotFoundException;
 import java.time.Clock;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MatchService {
 
-  private static final String CLUB_NOT_FOUND_MESSAGE = "Clube %d não encontrado.";
   private static final String INCOMPLETE_LINEUP_MESSAGE =
       "O clube %s não tem escalação completa (5 titulares) e não pode jogar.";
 
@@ -66,8 +65,6 @@ public class MatchService {
   }
 
   private Club findClub(Integer clubId) {
-    return clubRepository
-        .findById(clubId)
-        .orElseThrow(() -> new ResourceNotFoundException(CLUB_NOT_FOUND_MESSAGE.formatted(clubId)));
+    return clubRepository.findById(clubId).orElseThrow(() -> new ClubNotFoundException(clubId));
   }
 }

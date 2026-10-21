@@ -11,9 +11,9 @@ import com.dev1_isitics.ligahub_be.modules.market.domain.Transaction;
 import com.dev1_isitics.ligahub_be.modules.market.infrastructure.ContractRepository;
 import com.dev1_isitics.ligahub_be.modules.market.infrastructure.TransactionRepository;
 import com.dev1_isitics.ligahub_be.modules.players.domain.Player;
+import com.dev1_isitics.ligahub_be.modules.players.domain.PlayerNotFoundException;
 import com.dev1_isitics.ligahub_be.modules.players.infrastructure.PlayerRepository;
 import com.dev1_isitics.ligahub_be.shared.exception.BusinessRuleException;
-import com.dev1_isitics.ligahub_be.shared.exception.ResourceNotFoundException;
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Instant;
@@ -30,7 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class SaleService {
 
-  private static final String PLAYER_NOT_FOUND_MESSAGE = "Jogador %d não encontrado.";
   private static final String FREE_PLAYER_MESSAGE =
       "O jogador %s está livre; só jogadores de um clube podem ser vendidos.";
   private static final String MISSING_CONTRACT_MESSAGE =
@@ -48,8 +47,7 @@ public class SaleService {
     Player player =
         playerRepository
             .findActiveByIdForUpdate(playerId)
-            .orElseThrow(
-                () -> new ResourceNotFoundException(PLAYER_NOT_FOUND_MESSAGE.formatted(playerId)));
+            .orElseThrow(() -> new PlayerNotFoundException(playerId));
     if (player.isFree()) {
       throw new BusinessRuleException(FREE_PLAYER_MESSAGE.formatted(player.getName()));
     }

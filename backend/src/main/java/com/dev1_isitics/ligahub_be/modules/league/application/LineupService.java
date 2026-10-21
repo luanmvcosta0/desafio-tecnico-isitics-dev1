@@ -1,6 +1,7 @@
 package com.dev1_isitics.ligahub_be.modules.league.application;
 
 import com.dev1_isitics.ligahub_be.modules.clubs.domain.Club;
+import com.dev1_isitics.ligahub_be.modules.clubs.domain.ClubNotFoundException;
 import com.dev1_isitics.ligahub_be.modules.clubs.infrastructure.ClubRepository;
 import com.dev1_isitics.ligahub_be.modules.league.domain.Formation;
 import com.dev1_isitics.ligahub_be.modules.league.domain.LineupEntry;
@@ -8,9 +9,9 @@ import com.dev1_isitics.ligahub_be.modules.league.infrastructure.LineupEntryRepo
 import com.dev1_isitics.ligahub_be.modules.players.application.PlayerSort;
 import com.dev1_isitics.ligahub_be.modules.players.domain.Condition;
 import com.dev1_isitics.ligahub_be.modules.players.domain.Player;
+import com.dev1_isitics.ligahub_be.modules.players.domain.PlayerNotFoundException;
 import com.dev1_isitics.ligahub_be.modules.players.infrastructure.PlayerRepository;
 import com.dev1_isitics.ligahub_be.shared.exception.BusinessRuleException;
-import com.dev1_isitics.ligahub_be.shared.exception.ResourceNotFoundException;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
@@ -26,8 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class LineupService {
 
-  private static final String CLUB_NOT_FOUND_MESSAGE = "Clube %d não encontrado.";
-  private static final String PLAYER_NOT_FOUND_MESSAGE = "Jogador %d não encontrado.";
   private static final String NOT_IN_SQUAD_MESSAGE =
       "O jogador %s não pertence ao elenco do clube %s.";
   private static final String SICK_PLAYER_MESSAGE =
@@ -76,16 +75,13 @@ public class LineupService {
   }
 
   private Club findClub(Integer clubId) {
-    return clubRepository
-        .findById(clubId)
-        .orElseThrow(() -> new ResourceNotFoundException(CLUB_NOT_FOUND_MESSAGE.formatted(clubId)));
+    return clubRepository.findById(clubId).orElseThrow(() -> new ClubNotFoundException(clubId));
   }
 
   private Player findPlayer(Integer playerId) {
     return playerRepository
         .findByIdAndDeletedAtIsNull(playerId)
-        .orElseThrow(
-            () -> new ResourceNotFoundException(PLAYER_NOT_FOUND_MESSAGE.formatted(playerId)));
+        .orElseThrow(() -> new PlayerNotFoundException(playerId));
   }
 
   private static List<Player> inSquadOrder(List<Player> players) {

@@ -1,10 +1,10 @@
 package com.dev1_isitics.ligahub_be.modules.players.application;
 
+import com.dev1_isitics.ligahub_be.modules.clubs.domain.ClubNotFoundException;
 import com.dev1_isitics.ligahub_be.modules.clubs.infrastructure.ClubRepository;
 import com.dev1_isitics.ligahub_be.modules.players.domain.Player;
 import com.dev1_isitics.ligahub_be.modules.players.infrastructure.PlayerRepository;
 import com.dev1_isitics.ligahub_be.modules.players.infrastructure.PlayerSpecifications;
-import com.dev1_isitics.ligahub_be.shared.exception.ResourceNotFoundException;
 import com.dev1_isitics.ligahub_be.shared.text.AlphabeticalComparator;
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -22,15 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PlayerQueryService {
 
-  private static final String CLUB_NOT_FOUND_MESSAGE = "Clube %d não encontrado.";
-
   private final PlayerRepository playerRepository;
   private final ClubRepository clubRepository;
 
   @Transactional(readOnly = true)
   public PlayerPage list(PlayerListQuery query) {
     if (query.clubId() != null && !clubRepository.existsById(query.clubId())) {
-      throw new ResourceNotFoundException(CLUB_NOT_FOUND_MESSAGE.formatted(query.clubId()));
+      throw new ClubNotFoundException(query.clubId());
     }
     List<Player> matching =
         playerRepository.findAll(PlayerSpecifications.matchingColumns(query)).stream()

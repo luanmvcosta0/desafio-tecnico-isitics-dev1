@@ -5,9 +5,9 @@ import com.dev1_isitics.ligahub_be.modules.players.api.PlayerCreateRequest;
 import com.dev1_isitics.ligahub_be.modules.players.api.PlayerUpdateRequest;
 import com.dev1_isitics.ligahub_be.modules.players.domain.Condition;
 import com.dev1_isitics.ligahub_be.modules.players.domain.Player;
+import com.dev1_isitics.ligahub_be.modules.players.domain.PlayerNotFoundException;
 import com.dev1_isitics.ligahub_be.modules.players.infrastructure.PlayerRepository;
 import com.dev1_isitics.ligahub_be.shared.exception.BusinessRuleException;
-import com.dev1_isitics.ligahub_be.shared.exception.ResourceNotFoundException;
 import java.time.Clock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PlayerService {
 
-  private static final String PLAYER_NOT_FOUND_MESSAGE = "Jogador %d não encontrado.";
   private static final String POSITION_LOCKED_MESSAGE =
       "Jogador com clube não pode mudar de posição (atual: %s).";
   private static final String AGE_DECREASE_MESSAGE =
@@ -48,7 +47,7 @@ public class PlayerService {
   public Player findActive(Integer id) {
     return playerRepository
         .findByIdAndDeletedAtIsNull(id)
-        .orElseThrow(() -> new ResourceNotFoundException(PLAYER_NOT_FOUND_MESSAGE.formatted(id)));
+        .orElseThrow(() -> new PlayerNotFoundException(id));
   }
 
   @Transactional

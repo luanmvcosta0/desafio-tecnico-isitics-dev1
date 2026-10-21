@@ -1,6 +1,7 @@
 package com.dev1_isitics.ligahub_be.modules.market.application;
 
 import com.dev1_isitics.ligahub_be.modules.clubs.domain.Club;
+import com.dev1_isitics.ligahub_be.modules.clubs.domain.ClubNotFoundException;
 import com.dev1_isitics.ligahub_be.modules.clubs.infrastructure.ClubRepository;
 import com.dev1_isitics.ligahub_be.modules.market.domain.Contract;
 import com.dev1_isitics.ligahub_be.modules.market.domain.MarketLimits;
@@ -10,10 +11,10 @@ import com.dev1_isitics.ligahub_be.modules.market.domain.TransactionType;
 import com.dev1_isitics.ligahub_be.modules.market.infrastructure.ContractRepository;
 import com.dev1_isitics.ligahub_be.modules.market.infrastructure.TransactionRepository;
 import com.dev1_isitics.ligahub_be.modules.players.domain.Player;
+import com.dev1_isitics.ligahub_be.modules.players.domain.PlayerNotFoundException;
 import com.dev1_isitics.ligahub_be.modules.players.infrastructure.PlayerRepository;
 import com.dev1_isitics.ligahub_be.shared.exception.BusinessRuleException;
 import com.dev1_isitics.ligahub_be.shared.exception.InvalidRequestException;
-import com.dev1_isitics.ligahub_be.shared.exception.ResourceNotFoundException;
 import com.dev1_isitics.ligahub_be.shared.money.Money;
 import java.math.BigDecimal;
 import java.time.Clock;
@@ -36,8 +37,6 @@ public class PurchaseService {
       "O fim da fidelidade (loyalty_until) deve ser depois do momento da compra e até "
           + MarketLimits.MAX_LOYALTY_DAYS
           + " dias depois dele.";
-  private static final String PLAYER_NOT_FOUND_MESSAGE = "Jogador %d não encontrado.";
-  private static final String CLUB_NOT_FOUND_MESSAGE = "Clube %d não encontrado.";
   private static final String PLAYER_NOT_FREE_MESSAGE =
       "O jogador %s já pertence a um clube; só jogadores livres podem ser comprados.";
   private static final String REBUY_MESSAGE =
@@ -61,13 +60,11 @@ public class PurchaseService {
     Player player =
         playerRepository
             .findActiveByIdForUpdate(playerId)
-            .orElseThrow(
-                () -> new ResourceNotFoundException(PLAYER_NOT_FOUND_MESSAGE.formatted(playerId)));
+            .orElseThrow(() -> new PlayerNotFoundException(playerId));
     Club club =
         clubRepository
             .findByIdForUpdate(clubId)
-            .orElseThrow(
-                () -> new ResourceNotFoundException(CLUB_NOT_FOUND_MESSAGE.formatted(clubId)));
+            .orElseThrow(() -> new ClubNotFoundException(clubId));
 
     BigDecimal value = player.marketValue();
     BigDecimal fee = PurchaseFeeCalculator.fee(value);
