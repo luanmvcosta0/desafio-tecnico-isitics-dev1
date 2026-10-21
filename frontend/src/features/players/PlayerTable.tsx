@@ -6,6 +6,7 @@ import { conditionLabels, FREE_PLAYER_LABEL, positionLabels } from './playerLabe
 
 interface PlayerTableProps {
   players: Player[] | null
+  clubAcronyms: Map<number, string>
   isLoading: boolean
   error: string | null
   onRetry: () => void
@@ -16,6 +17,7 @@ interface PlayerTableProps {
 
 export function PlayerTable({
   players,
+  clubAcronyms,
   isLoading,
   error,
   onRetry,
@@ -40,7 +42,10 @@ export function PlayerTable({
     },
     {
       header: 'Clube',
-      render: (player) => (player.club_id === null ? FREE_PLAYER_LABEL : `#${player.club_id}`),
+      render: (player) =>
+        player.club_id === null
+          ? FREE_PLAYER_LABEL
+          : (clubAcronyms.get(player.club_id) ?? `#${player.club_id}`),
     },
     {
       header: 'Ações',

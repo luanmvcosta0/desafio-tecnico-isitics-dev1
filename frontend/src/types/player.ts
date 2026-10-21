@@ -50,7 +50,23 @@ export interface PaginatedPlayers {
   meta: { page: number; limit: number; total_items: number; total_pages: number }
 }
 
-export interface PlayerListParams {
+export type PlayerSort = 'name' | 'value_asc' | 'value_desc' | 'age_asc' | 'age_desc' | 'position'
+
+/** Filters typed on the screen, sent as written: the API validates formats and ranges. */
+export interface PlayerFilters {
+  search: string
+  position: Position | ''
+  condition: Condition | ''
+  free: boolean
+  club_id: string
+  min_age: string
+  max_age: string
+  min_value: string
+  max_value: string
+  sort: PlayerSort
+}
+
+export interface PlayerListParams extends PlayerFilters {
   page: number
   limit: number
 }

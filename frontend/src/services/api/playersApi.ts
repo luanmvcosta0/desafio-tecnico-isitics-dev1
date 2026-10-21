@@ -10,8 +10,10 @@ import { requestJson, requestWithoutContent } from './httpClient'
 
 const PLAYERS_PATH = '/players'
 
-export function listPlayers(params: PlayerListParams): Promise<PaginatedPlayers> {
-  return requestJson<PaginatedPlayers>(PLAYERS_PATH, { query: { ...params } })
+export function listPlayers({ free, ...params }: PlayerListParams): Promise<PaginatedPlayers> {
+  return requestJson<PaginatedPlayers>(PLAYERS_PATH, {
+    query: { ...params, free: free ? 'true' : undefined },
+  })
 }
 
 export function createPlayer(input: PlayerCreateInput): Promise<Player> {

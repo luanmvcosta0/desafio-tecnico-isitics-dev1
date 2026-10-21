@@ -1,19 +1,22 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { PageHeader } from '../components/layout/PageHeader'
 import { Alert } from '../components/ui/Alert'
 import { Button } from '../components/ui/Button'
 import { ConfirmDialog } from '../components/ui/ConfirmDialog'
 import { Modal } from '../components/ui/Modal'
 import { Pagination } from '../components/ui/Pagination'
+import { useClubs } from '../features/clubs/useClubs'
 import { ConditionForm } from '../features/players/ConditionForm'
 import { PlayerCreateForm } from '../features/players/PlayerCreateForm'
 import { PlayerEditForm } from '../features/players/PlayerEditForm'
+import { PlayerFilterForm } from '../features/players/PlayerFilterForm'
+import { EMPTY_PLAYER_FILTERS } from '../features/players/playerFilterDefaults'
 import { PlayerSummary } from '../features/players/PlayerSummary'
 import { PlayerTable } from '../features/players/PlayerTable'
 import { usePlayers } from '../features/players/usePlayers'
 import { useMutation } from '../hooks/useMutation'
 import { deletePlayer } from '../services/api/playersApi'
-import type { Player } from '../types/player'
+import type { Player, PlayerFilters } from '../types/player'
 
 type Dialog = { type: 'edit' | 'condition' | 'delete'; player: Player } | null
 
@@ -23,7 +26,13 @@ export function PlayersPage() {
   const [createdPlayer, setCreatedPlayer] = useState<Player | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
   const [dialog, setDialog] = useState<Dialog>(null)
-  const players = usePlayers(page)
+  const [filters, setFilters] = useState<PlayerFilters>(EMPTY_PLAYER_FILTERS)
+  const players = usePlayers(page, filters)
+  const clubs = useClubs()
+  const clubAcronyms = useMemo(
+    () => new Map((clubs.data ?? []).map((club) => [club.id, club.acronym])),
+    [clubs.data],
+  )
   const removal = useMutation(deletePlayer, {
     onSuccess: () => {
       finishAction(`Jogador ${dialog?.player.name} excluído.`)
@@ -51,6 +60,11 @@ export function PlayersPage() {
     removal.reset()
     setNotice(null)
     setDialog({ type, player })
+  }
+
+  function applyFilters(next: PlayerFilters) {
+    setPage(1)
+    setFilters(next)
   }
 
   const closeDialog = () => setDialog(null)
@@ -85,11 +99,13 @@ export function PlayersPage() {
         {notice && <Alert variant="success">{notice}</Alert>}
         {createdPlayer && <PlayerSummary player={createdPlayer} />}
 
+        <PlayerFilterForm clubs={clubs.data ?? []} onApply={applyFilters} />
         <p className="text-sm text-slate-600" aria-live="polite">
           {totalItems !== undefined && `${totalItems} jogador(es) encontrado(s)`}
         </p>
         <PlayerTable
           players={players.data?.data ?? null}
+          clubAcronyms={clubAcronyms}
           isLoading={players.isLoading}
           error={players.error}
           onRetry={players.reload}
