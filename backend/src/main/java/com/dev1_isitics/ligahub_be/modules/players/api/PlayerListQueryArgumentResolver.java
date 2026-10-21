@@ -1,8 +1,7 @@
 package com.dev1_isitics.ligahub_be.modules.players.api;
 
 import com.dev1_isitics.ligahub_be.modules.players.application.PlayerListQuery;
-import java.util.Map;
-import java.util.stream.Collectors;
+import com.dev1_isitics.ligahub_be.shared.web.QueryParams;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -25,9 +24,6 @@ public class PlayerListQueryArgumentResolver implements HandlerMethodArgumentRes
       ModelAndViewContainer mavContainer,
       NativeWebRequest webRequest,
       WebDataBinderFactory binderFactory) {
-    Map<String, String> firstValues =
-        webRequest.getParameterMap().entrySet().stream()
-            .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue()[0]));
-    return PlayerListQueryParser.parse(firstValues);
+    return PlayerListQueryParser.parse(QueryParams.firstValues(webRequest));
   }
 }

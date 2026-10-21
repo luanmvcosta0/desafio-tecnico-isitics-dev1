@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import org.springframework.web.context.request.NativeWebRequest;
 
 /**
  * Strict readers of query params shared by the listing endpoints. An absent parameter means "use
@@ -26,6 +28,16 @@ public final class QueryParams {
 
   public QueryParams(Map<String, String> values) {
     this.values = values;
+  }
+
+  /** The first value of each query param of the request; repeated params keep only the first. */
+  public static Map<String, String> firstValues(NativeWebRequest request) {
+    return request.getParameterMap().entrySet().stream()
+        .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue()[0]));
+  }
+
+  public static QueryParams of(NativeWebRequest request) {
+    return new QueryParams(firstValues(request));
   }
 
   public Optional<String> text(String name) {

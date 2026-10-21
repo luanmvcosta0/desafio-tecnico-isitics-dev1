@@ -1,8 +1,7 @@
 package com.dev1_isitics.ligahub_be.modules.market.api;
 
 import com.dev1_isitics.ligahub_be.modules.market.application.TransactionFilter;
-import java.util.Map;
-import java.util.stream.Collectors;
+import com.dev1_isitics.ligahub_be.shared.web.QueryParams;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -23,9 +22,6 @@ public class TransactionFilterArgumentResolver implements HandlerMethodArgumentR
       ModelAndViewContainer mavContainer,
       NativeWebRequest webRequest,
       WebDataBinderFactory binderFactory) {
-    Map<String, String> firstValues =
-        webRequest.getParameterMap().entrySet().stream()
-            .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue()[0]));
-    return TransactionFilterParser.parse(firstValues);
+    return TransactionFilterParser.parse(QueryParams.firstValues(webRequest));
   }
 }

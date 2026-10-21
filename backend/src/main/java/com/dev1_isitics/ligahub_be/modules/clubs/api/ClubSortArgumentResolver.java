@@ -2,7 +2,6 @@ package com.dev1_isitics.ligahub_be.modules.clubs.api;
 
 import com.dev1_isitics.ligahub_be.modules.clubs.application.ClubSort;
 import com.dev1_isitics.ligahub_be.shared.web.QueryParams;
-import java.util.Map;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -25,9 +24,7 @@ public class ClubSortArgumentResolver implements HandlerMethodArgumentResolver {
       ModelAndViewContainer mavContainer,
       NativeWebRequest webRequest,
       WebDataBinderFactory binderFactory) {
-    String value = webRequest.getParameter(SORT);
-    QueryParams params = new QueryParams(value == null ? Map.of() : Map.of(SORT, value));
-    return params
+    return QueryParams.of(webRequest)
         .text(SORT)
         .map(
             sort -> ClubSort.fromParameter(sort).orElseThrow(() -> QueryParams.invalid(SORT, sort)))
