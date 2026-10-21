@@ -94,6 +94,27 @@ public class Player {
     return player;
   }
 
+  /** Edition (RN08): only these four fields change; attributes and base value stay as registered. */
+  public void edit(String name, Position position, int agility, int age) {
+    this.name = name;
+    this.position = position;
+    this.agility = agility;
+    this.age = age;
+  }
+
+  public void changeCondition(Condition condition) {
+    this.condition = condition;
+  }
+
+  /** Logical deletion (RN09): nothing is removed, the player just stops existing for the API. */
+  public void delete(Instant deletedAt) {
+    this.deletedAt = deletedAt;
+  }
+
+  public boolean isFree() {
+    return clubId == null;
+  }
+
   public int overall() {
     return OverallCalculator.calculate(position, attributes);
   }

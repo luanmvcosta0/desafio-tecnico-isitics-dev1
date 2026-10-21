@@ -5,8 +5,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -184,5 +189,46 @@ class PlayerControllerTest {
         .perform(get("/api/v1/players/7"))
         .andExpect(status().isNotFound())
         .andExpect(jsonPath("$.message").value("Jogador 7 não encontrado."));
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "{\"position\": \"MEI\", \"agility\": 70, \"age\": 23}",
+        "{\"name\": \"Davi Melo\", \"position\": \"mei\", \"agility\": 70, \"age\": 23}",
+        "{\"name\": \"Davi Melo\", \"position\": \"MEI\", \"agility\": 90, \"age\": 36}",
+        "{\"name\": \"Davi\", \"position\": \"MEI\", \"agility\": 70, \"age\": 23}",
+        "[]"
+      })
+  void rejectsInvalidEditionWithoutCallingTheService(String body) throws Exception {
+    mockMvc
+        .perform(put("/api/v1/players/2").contentType(MediaType.APPLICATION_JSON).content(body))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").isNotEmpty());
+
+    verify(playerService, never()).edit(anyInt(), any());
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"{}", "{\"condition\": null}", "{\"condition\": \"apto\"}", "10"})
+  void rejectsInvalidConditionWithoutCallingTheService(String body) throws Exception {
+    mockMvc
+        .perform(
+            patch("/api/v1/players/2/condition")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+        .andExpect(status().isBadRequest());
+
+    verify(playerService, never()).changeCondition(anyInt(), any());
+  }
+
+  @Test
+  void deletesWithNoContent() throws Exception {
+    mockMvc
+        .perform(delete("/api/v1/players/2"))
+        .andExpect(status().isNoContent())
+        .andExpect(content().string(""));
+
+    verify(playerService).delete(2);
   }
 }
