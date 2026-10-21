@@ -1,0 +1,46 @@
+package com.dev1_isitics.ligahub_be.modules.league.application;
+
+import com.dev1_isitics.ligahub_be.modules.clubs.domain.Club;
+import com.dev1_isitics.ligahub_be.modules.clubs.infrastructure.ClubRepository;
+import com.dev1_isitics.ligahub_be.modules.league.domain.Match;
+import com.dev1_isitics.ligahub_be.modules.league.infrastructure.MatchDuelRepository;
+import com.dev1_isitics.ligahub_be.modules.league.infrastructure.MatchRepository;
+import com.dev1_isitics.ligahub_be.shared.exception.ResourceNotFoundException;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/** Match details, read as recorded (RN21). */
+@Service
+@RequiredArgsConstructor
+public class MatchQueryService {
+
+  private static final String MATCH_NOT_FOUND_MESSAGE = "Partida %d não encontrada.";
+
+  private final ClubRepository clubRepository;
+  private final MatchRepository matchRepository;
+  private final MatchDuelRepository matchDuelRepository;
+
+  @Transactional(readOnly = true)
+  public PlayedMatch find(Integer matchId) {
+    Match match =
+        matchRepository
+            .findById(matchId)
+            .orElseThrow(
+                () -> new ResourceNotFoundException(MATCH_NOT_FOUND_MESSAGE.formatted(matchId)));
+    Map<Integer, Club> clubs = clubsById();
+    return new PlayedMatch(
+        match,
+        clubs.get(match.getHomeClubId()),
+        clubs.get(match.getAwayClubId()),
+        matchDuelRepository.findByMatchIdOrderByOrderAsc(matchId));
+  }
+
+  private Map<Integer, Club> clubsById() {
+    return clubRepository.findAll().stream()
+        .collect(Collectors.toMap(Club::getId, Function.identity()));
+  }
+}
