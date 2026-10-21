@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ${DB_NAME:-ligahub}
+      POSTGRES_USER: ${DB_USER:-ligahub}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-ligahub}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-ligahub}
+      DB_USER: ${DB_USER:-ligahub}
+      DB_PASSWORD: ${DB_PASSWORD:-ligahub}
+      SERVER_PORT: 8080
+      CORS_ALLOWED_ORIGIN: ${CORS_ALLOWED_ORIGIN:-http://localhost:5173}
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_ORIGIN: ${VITE_API_ORIGIN:-http://localhost:8080}
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  db-data:
