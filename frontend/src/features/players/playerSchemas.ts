@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { POSITIONS } from '../../types/player'
+import { CONDITIONS, POSITIONS } from '../../types/player'
 
 const NAME_MIN_LENGTH = 3
 const NAME_MAX_LENGTH = 100
@@ -21,8 +21,7 @@ function integerBetween(min: number, max: number) {
 
 const attribute = integerBetween(ATTRIBUTE_MIN, ATTRIBUTE_MAX)
 
-/** Required fields and single-field limits; cross-field rules stay with the API. */
-export const playerCreateSchema = z.object({
+const profileFields = {
   name: z
     .string()
     .trim()
@@ -32,6 +31,11 @@ export const playerCreateSchema = z.object({
   position: z.enum(POSITIONS, { error: 'Selecione a posição.' }),
   agility: integerBetween(AGILITY_MIN, AGILITY_MAX),
   age: integerBetween(AGE_MIN, AGE_MAX),
+}
+
+/** Required fields and single-field limits; cross-field rules stay with the API. */
+export const playerCreateSchema = z.object({
+  ...profileFields,
   pace: attribute,
   shooting: attribute,
   passing: attribute,
@@ -42,3 +46,13 @@ export const playerCreateSchema = z.object({
 })
 
 export type PlayerCreateValues = z.input<typeof playerCreateSchema>
+
+export const playerUpdateSchema = z.object(profileFields)
+
+export type PlayerUpdateValues = z.input<typeof playerUpdateSchema>
+
+export const conditionChangeSchema = z.object({
+  condition: z.enum(CONDITIONS, { error: 'Selecione a condição.' }),
+})
+
+export type ConditionChangeValues = z.input<typeof conditionChangeSchema>
