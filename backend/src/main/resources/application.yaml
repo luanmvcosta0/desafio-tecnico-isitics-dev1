@@ -1,6 +1,8 @@
 spring:
   application:
     name: ligahub-be
+  config:
+    import: optional:file:.env[.properties]
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:ligahub}
     username: ${DB_USER:ligahub}
@@ -20,3 +22,7 @@ server:
     include-message: never
     include-exception: false
     include-binding-errors: never
+
+app:
+  cors:
+    allowed-origin: ${CORS_ALLOWED_ORIGIN:http://localhost:5173}
