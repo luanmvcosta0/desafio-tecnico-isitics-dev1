@@ -5,17 +5,19 @@ import { PageHeader } from '../components/layout/PageHeader'
 import { SummaryList } from '../components/ui/SummaryList'
 import { Tabs, type Tab } from '../components/ui/Tabs'
 import { SquadTable } from '../features/clubs/SquadTable'
+import { LineupSection } from '../features/league/LineupSection'
 import { useClub } from '../features/clubs/useClub'
 import { SaleDialog } from '../features/market/SaleDialog'
 import { TransactionHistorySection } from '../features/transactions/TransactionHistorySection'
 import type { SquadPlayer } from '../types/club'
 import { formatMoney } from '../utils/format'
 
-type ClubTab = 'squad' | 'history'
+type ClubTab = 'squad' | 'history' | 'lineup'
 
 const clubTabs: Tab<ClubTab>[] = [
   { id: 'squad', label: 'Elenco' },
   { id: 'history', label: 'Histórico de transações' },
+  { id: 'lineup', label: 'Escalação' },
 ]
 
 export function ClubDetailsPage() {
@@ -49,7 +51,7 @@ export function ClubDetailsPage() {
           </section>
         )}
         <Tabs label="Seções do clube" tabs={clubTabs} active={tab} onChange={setTab}>
-          {tab === 'squad' ? (
+          {tab === 'squad' && (
             <SquadTable
               players={club.data?.players ?? null}
               isLoading={club.isLoading}
@@ -57,9 +59,9 @@ export function ClubDetailsPage() {
               onRetry={club.reload}
               onSell={setSelling}
             />
-          ) : (
-            <TransactionHistorySection clubId={clubId} />
           )}
+          {tab === 'history' && <TransactionHistorySection clubId={clubId} />}
+          {tab === 'lineup' && <LineupSection clubId={clubId} squad={club.data?.players ?? []} />}
         </Tabs>
       </div>
       {selling && (
