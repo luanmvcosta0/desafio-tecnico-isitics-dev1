@@ -1,3 +1,5 @@
+import { Link } from 'react-router'
+import { clubDetailsPath } from '../../app/routes'
 import { DataTable, type Column } from '../../components/ui/DataTable'
 import type { Club } from '../../types/club'
 import { formatMoney } from '../../utils/format'
@@ -10,7 +12,14 @@ interface ClubTableProps {
 }
 
 const columns: Column<Club>[] = [
-  { header: 'Nome', render: (club) => <span className="font-medium">{club.name}</span> },
+  {
+    header: 'Nome',
+    render: (club) => (
+      <Link to={clubDetailsPath(club.id)} className="text-brand-700 font-medium hover:underline">
+        {club.name}
+      </Link>
+    ),
+  },
   { header: 'Sigla', render: (club) => club.acronym },
   { header: 'Caixa', render: (club) => formatMoney(club.cash) },
   { header: 'Valor do elenco', render: (club) => formatMoney(club.squad_value) },

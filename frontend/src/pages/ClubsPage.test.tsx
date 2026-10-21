@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { MemoryRouter } from 'react-router'
 import { describe, expect, it } from 'vitest'
 import { jsonResponse, mockApi } from '../test/mockApi'
 import type { Club } from '../types/club'
@@ -22,6 +23,14 @@ const delta: Club = {
   net_worth: 300,
 }
 
+function renderPage() {
+  render(
+    <MemoryRouter>
+      <ClubsPage />
+    </MemoryRouter>,
+  )
+}
+
 function namesInTable() {
   return screen
     .getAllByRole('row')
@@ -42,7 +51,7 @@ describe('ClubsPage', () => {
       },
     })
     const user = userEvent.setup()
-    render(<ClubsPage />)
+    renderPage()
 
     expect(await screen.findByText('Águias FC')).toBeInTheDocument()
     expect(screen.getByText('261,15')).toBeInTheDocument()
@@ -58,7 +67,7 @@ describe('ClubsPage', () => {
 
   it('shows the empty state', async () => {
     mockApi({ 'GET /clubs': () => jsonResponse(200, []) })
-    render(<ClubsPage />)
+    renderPage()
 
     expect(await screen.findByText('Nenhum clube cadastrado.')).toBeInTheDocument()
   })
@@ -77,7 +86,7 @@ describe('ClubsPage', () => {
       },
     })
     const user = userEvent.setup()
-    render(<ClubsPage />)
+    renderPage()
     await screen.findByText('Nenhum clube cadastrado.')
 
     await user.click(screen.getByRole('button', { name: 'Novo clube' }))

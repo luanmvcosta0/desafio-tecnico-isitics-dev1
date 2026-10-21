@@ -5,3 +5,7 @@ export const routes = {
   matches: '/matches',
   standings: '/standings',
 } as const
+
+export function clubDetailsPath(clubId: number): string {
+  return `${routes.clubs}/${clubId}`
+}
