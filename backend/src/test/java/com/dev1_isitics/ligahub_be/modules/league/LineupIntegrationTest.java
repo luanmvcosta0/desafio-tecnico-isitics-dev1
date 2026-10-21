@@ -3,14 +3,20 @@ package com.dev1_isitics.ligahub_be.modules.league;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.dev1_isitics.ligahub_be.shared.time.BrasiliaDateTime;
 import com.dev1_isitics.ligahub_be.support.PlayerRequests;
 import com.dev1_isitics.ligahub_be.support.PostgresIntegrationTest;
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -175,5 +181,49 @@ class LineupIntegrationTest extends PostgresIntegrationTest {
 
     saveLineup(1, lineup("2-1-1", attacker, midfielder, goalkeeper, fullBack, defender))
         .andExpect(status().isOk());
+  }
+
+  @Test
+  void removesTheStarterThatBecomesSick() throws Exception {
+    saveLineup(1, lineup("2-1-1", attacker, midfielder, goalkeeper, fullBack, defender));
+
+    mockMvc
+        .perform(
+            patch("/api/v1/players/" + midfielder + "/condition")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"condition\": \"DOENTE\"}"))
+        .andExpect(status().isOk());
+
+    mockMvc
+        .perform(get("/api/v1/clubs/1/lineup"))
+        .andExpect(jsonPath("$.formation").value("2-1-1"))
+        .andExpect(jsonPath("$.complete").value(false))
+        .andExpect(jsonPath("$.players.length()").value(4));
+  }
+
+  @Test
+  void removesTheStarterThatIsSold() throws Exception {
+    jdbcTemplate.update("UPDATE jogadores SET clube_id = NULL WHERE id = ?", attacker);
+    String loyalty =
+        Instant.now()
+            .truncatedTo(ChronoUnit.MINUTES)
+            .plus(Duration.ofDays(30))
+            .atOffset(BrasiliaDateTime.OFFSET)
+            .format(DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mmXXX"));
+    mockMvc
+        .perform(
+            post("/api/v1/players/" + attacker + "/buy")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"club_id\": 1, \"loyalty_until\": \"" + loyalty + "\"}"))
+        .andExpect(status().isOk());
+    saveLineup(1, lineup("2-1-1", attacker, midfielder, goalkeeper, fullBack, defender))
+        .andExpect(status().isOk());
+
+    mockMvc.perform(post("/api/v1/players/" + attacker + "/sell")).andExpect(status().isOk());
+
+    mockMvc
+        .perform(get("/api/v1/clubs/1/lineup"))
+        .andExpect(jsonPath("$.complete").value(false))
+        .andExpect(jsonPath("$.players[*].position", contains("GOL", "ZAG", "LAT", "MEI")));
   }
 }

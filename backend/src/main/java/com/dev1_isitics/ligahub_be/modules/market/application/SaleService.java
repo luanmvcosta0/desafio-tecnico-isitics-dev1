@@ -2,6 +2,7 @@ package com.dev1_isitics.ligahub_be.modules.market.application;
 
 import com.dev1_isitics.ligahub_be.modules.clubs.domain.Club;
 import com.dev1_isitics.ligahub_be.modules.clubs.infrastructure.ClubRepository;
+import com.dev1_isitics.ligahub_be.modules.league.infrastructure.LineupEntryRepository;
 import com.dev1_isitics.ligahub_be.modules.market.domain.Contract;
 import com.dev1_isitics.ligahub_be.modules.market.domain.ContractStatus;
 import com.dev1_isitics.ligahub_be.modules.market.domain.LoyaltyPenaltyCalculator;
@@ -22,8 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Sale of a player by its current club (RN15, RN16): penalty for breaking the loyalty, progressive
- * commission on the profit and credit to the cash. Player, contract, cash and transaction are
- * written in a single database transaction.
+ * commission on the profit and credit to the cash. Player, contract, cash, transaction and the
+ * removal from the lineup (RN19) are written in a single database transaction.
  */
 @Service
 @RequiredArgsConstructor
@@ -39,6 +40,7 @@ public class SaleService {
   private final ClubRepository clubRepository;
   private final ContractRepository contractRepository;
   private final TransactionRepository transactionRepository;
+  private final LineupEntryRepository lineupEntryRepository;
   private final Clock clock;
 
   @Transactional
@@ -79,6 +81,7 @@ public class SaleService {
                 now));
     club.changeCash(transaction.getCashChange());
     player.leaveClub();
+    lineupEntryRepository.deleteByPlayerId(player.getId());
     contract.end(penaltyRate > 0, now);
     return new Sale(transaction, contract, remainingDays, penaltyRate, club.getCash());
   }

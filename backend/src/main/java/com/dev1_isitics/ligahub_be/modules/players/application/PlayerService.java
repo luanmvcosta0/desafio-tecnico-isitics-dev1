@@ -1,5 +1,6 @@
 package com.dev1_isitics.ligahub_be.modules.players.application;
 
+import com.dev1_isitics.ligahub_be.modules.league.infrastructure.LineupEntryRepository;
 import com.dev1_isitics.ligahub_be.modules.players.api.PlayerCreateRequest;
 import com.dev1_isitics.ligahub_be.modules.players.api.PlayerUpdateRequest;
 import com.dev1_isitics.ligahub_be.modules.players.domain.Condition;
@@ -27,6 +28,7 @@ public class PlayerService {
       "Só jogador livre pode ser excluído; venda o jogador antes de excluí-lo.";
 
   private final PlayerRepository playerRepository;
+  private final LineupEntryRepository lineupEntryRepository;
   private final Clock clock;
 
   @Transactional
@@ -62,6 +64,7 @@ public class PlayerService {
     return player;
   }
 
+  /** A starter that becomes DOENTE leaves the lineup in the same transaction (RN19). */
   @Transactional
   public Player changeCondition(Integer id, Condition condition) {
     Player player = findActive(id);
@@ -69,6 +72,9 @@ public class PlayerService {
       throw new BusinessRuleException(SICK_TO_FIT_MESSAGE);
     }
     player.changeCondition(condition);
+    if (condition == Condition.DOENTE) {
+      lineupEntryRepository.deleteByPlayerId(player.getId());
+    }
     return player;
   }
 
