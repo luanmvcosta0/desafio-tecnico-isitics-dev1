@@ -4,9 +4,10 @@ import { FormField } from '../../components/ui/FormField'
 import { Select } from '../../components/ui/Select'
 import { TextInput } from '../../components/ui/TextInput'
 import type { Club } from '../../types/club'
-import { CONDITIONS, POSITIONS, type PlayerFilters, type PlayerSort } from '../../types/player'
+import type { PlayerFilters, PlayerSort } from '../../types/player'
+import { clubOptions } from '../clubs/clubOptions'
 import { EMPTY_PLAYER_FILTERS } from './playerFilterDefaults'
-import { conditionLabels, positionLabels } from './playerLabels'
+import { conditionOptions, positionOptions } from './playerLabels'
 
 const sortOptions: { value: PlayerSort; label: string }[] = [
   { value: 'name', label: 'Nome (A–Z)' },
@@ -17,16 +18,6 @@ const sortOptions: { value: PlayerSort; label: string }[] = [
   { value: 'position', label: 'Posição (GOL → ATA)' },
 ]
 
-const positionOptions = POSITIONS.map((position) => ({
-  value: position,
-  label: `${position} · ${positionLabels[position]}`,
-}))
-
-const conditionOptions = CONDITIONS.map((condition) => ({
-  value: condition,
-  label: conditionLabels[condition],
-}))
-
 interface PlayerFilterFormProps {
   clubs: Club[]
   onApply: (filters: PlayerFilters) => void
@@ -35,10 +26,6 @@ interface PlayerFilterFormProps {
 /** Search, combinable filters and sort of the players list, applied on submit. */
 export function PlayerFilterForm({ clubs, onApply }: PlayerFilterFormProps) {
   const [draft, setDraft] = useState<PlayerFilters>(EMPTY_PLAYER_FILTERS)
-  const clubOptions = clubs.map((club) => ({
-    value: String(club.id),
-    label: `${club.acronym} · ${club.name}`,
-  }))
 
   function update<K extends keyof PlayerFilters>(key: K, value: PlayerFilters[K]) {
     setDraft((current) => ({ ...current, [key]: value }))
@@ -98,7 +85,7 @@ export function PlayerFilterForm({ clubs, onApply }: PlayerFilterFormProps) {
         <Select
           id="filter-club"
           placeholder="Todos"
-          options={clubOptions}
+          options={clubOptions(clubs)}
           value={draft.club_id}
           disabled={draft.free}
           onChange={(event) => update('club_id', event.target.value)}

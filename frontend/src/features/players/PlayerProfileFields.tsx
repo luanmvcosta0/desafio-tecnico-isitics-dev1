@@ -3,15 +3,9 @@ import { fieldErrorId } from '../../components/ui/fieldStyles'
 import { FormField } from '../../components/ui/FormField'
 import { Select } from '../../components/ui/Select'
 import { TextInput } from '../../components/ui/TextInput'
-import { POSITIONS } from '../../types/player'
 import { PlayerNumberField } from './PlayerNumberField'
-import { positionLabels } from './playerLabels'
+import { positionOptions } from './playerLabels'
 import type { PlayerUpdateValues } from './playerSchemas'
-
-const positionOptions = POSITIONS.map((position) => ({
-  value: position,
-  label: `${position} · ${positionLabels[position]}`,
-}))
 
 /** Name, position, agility and age: the fields shared by the registration and the edition. */
 export function PlayerProfileFields() {

@@ -11,6 +11,7 @@ import { buyPlayer } from '../../services/api/marketApi'
 import type { Club } from '../../types/club'
 import type { PurchaseInput, PurchaseResult } from '../../types/market'
 import type { Player } from '../../types/player'
+import { clubOptions } from '../clubs/clubOptions'
 import { purchaseSchema, type PurchaseValues } from './purchaseSchemas'
 
 interface PurchaseFormProps {
@@ -33,10 +34,6 @@ export function PurchaseForm({ player, clubs, onPurchased, onCancel }: PurchaseF
   const { submit, isSubmitting, errorMessage } = useMutation(purchase, {
     onSuccess: onPurchased,
   })
-  const clubOptions = clubs.map((club) => ({
-    value: String(club.id),
-    label: `${club.acronym} · ${club.name}`,
-  }))
 
   return (
     <form
@@ -49,7 +46,7 @@ export function PurchaseForm({ player, clubs, onPurchased, onCancel }: PurchaseF
         <Select
           id="purchase-club"
           placeholder="Selecione"
-          options={clubOptions}
+          options={clubOptions(clubs)}
           aria-invalid={errors.club_id ? true : undefined}
           aria-describedby={errors.club_id ? fieldErrorId('purchase-club') : undefined}
           {...register('club_id')}

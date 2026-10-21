@@ -2,19 +2,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { fieldErrorId } from '../../components/ui/fieldStyles'
+import { FormActions } from '../../components/ui/FormActions'
 import { FormField } from '../../components/ui/FormField'
 import { Select } from '../../components/ui/Select'
 import { useMutation } from '../../hooks/useMutation'
 import { changePlayerCondition } from '../../services/api/playersApi'
-import { CONDITIONS, type Condition, type Player } from '../../types/player'
-import { FormActions } from '../../components/ui/FormActions'
-import { conditionLabels } from './playerLabels'
+import type { Condition, Player } from '../../types/player'
+import { conditionOptions } from './playerLabels'
 import { conditionChangeSchema, type ConditionChangeValues } from './playerSchemas'
-
-const conditionOptions = CONDITIONS.map((condition) => ({
-  value: condition,
-  label: conditionLabels[condition],
-}))
 
 interface ConditionFormProps {
   player: Player
