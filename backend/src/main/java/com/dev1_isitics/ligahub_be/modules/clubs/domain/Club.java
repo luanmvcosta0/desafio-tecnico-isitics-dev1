@@ -1,6 +1,9 @@
 package com.dev1_isitics.ligahub_be.modules.clubs.domain;
 
+import com.dev1_isitics.ligahub_be.modules.league.domain.Formation;
+import com.dev1_isitics.ligahub_be.modules.league.domain.FormationConverter;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,6 +39,11 @@ public class Club {
   @Column(name = "caixa", nullable = false, precision = 10, scale = 2)
   private BigDecimal cash;
 
+  /** Formation of the lineup; null while the club has never set one (RN19). */
+  @Convert(converter = FormationConverter.class)
+  @Column(name = "formacao", length = 5)
+  private Formation formation;
+
   @CreationTimestamp
   @Column(name = "criado_em", nullable = false, updatable = false)
   private Instant createdAt;
@@ -47,6 +55,10 @@ public class Club {
     club.acronym = acronym;
     club.cash = ClubLimits.INITIAL_CASH;
     return club;
+  }
+
+  public void changeFormation(Formation formation) {
+    this.formation = formation;
   }
 
   /** The cash changes only by purchases and sales (RN10). */
