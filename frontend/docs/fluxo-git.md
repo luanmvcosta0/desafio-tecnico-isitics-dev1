@@ -133,19 +133,19 @@ esperado, cada um atômico.
 
 ### Frontend
 
-| #   | Funcionalidade             | Commits atômicos                                                                                                             |
-| --- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Base do projeto            | projeto Vite + TS; Tailwind; React Router (modo biblioteca) com layout; httpClient e formatadores; Vitest; oxlint + Prettier |
-| 2   | Componentes compartilhados | DataTable com estados; FormField e inputs; Alert/Toast; ConfirmDialog; Pagination                                            |
-| 3   | Tabela de jogadores        | tipos e playersApi; hook de listagem; tabela paginada (F01)                                                                  |
-| 4   | Filtros de jogadores       | busca; filtros combináveis; ordenação; bloqueio "só livres" + clube (F02)                                                    |
-| 5   | Formulários de jogadores   | schemas Zod; cadastro; edição; alteração de condição; exclusão com confirmação (F03, F04)                                    |
-| 6   | Clubes                     | clubsApi; listagem com ordenação; criação (F05)                                                                              |
-| 7   | Compra                     | formulário de compra com data em Brasília; resultado da compra (F06)                                                         |
-| 8   | Página do clube e venda    | elenco e contrato; venda com confirmação e resultado (F07, F08)                                                              |
-| 9   | Histórico                  | tabela do histórico; filtros; summary; exportação CSV (F09–F11)                                                              |
-| 10  | Escalação                  | aba de escalação por vagas da formação; aviso de incompleta (F12)                                                            |
-| 11  | Partidas                   | nova partida com duelos; histórico com filtro; detalhes; classificação (F13, F14)                                            |
-| 12  | Responsividade             | ajustes para 375 px (F5)                                                                                                     |
-| 13  | Docker                     | Dockerfile + nginx com fallback de SPA                                                                                       |
-| 14  | README                     | README com todos os itens exigidos                                                                                           |
+| #   | Funcionalidade             | Commits atômicos                                                                                                              |
+| --- | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Base do projeto            | projeto Vite + TS; Tailwind; React Router (modo Declarative) com layout; httpClient e formatadores; Vitest; oxlint + Prettier |
+| 2   | Componentes compartilhados | DataTable com estados; FormField e inputs; Alert/Toast; ConfirmDialog; Pagination                                             |
+| 3   | Tabela de jogadores        | tipos e playersApi; hook de listagem; tabela paginada (F01)                                                                   |
+| 4   | Filtros de jogadores       | busca; filtros combináveis; ordenação; bloqueio "só livres" + clube (F02)                                                     |
+| 5   | Formulários de jogadores   | schemas Zod; cadastro; edição; alteração de condição; exclusão com confirmação (F03, F04)                                     |
+| 6   | Clubes                     | clubsApi; listagem com ordenação; criação (F05)                                                                               |
+| 7   | Compra                     | formulário de compra com data em Brasília; resultado da compra (F06)                                                          |
+| 8   | Página do clube e venda    | elenco e contrato; venda com confirmação e resultado (F07, F08)                                                               |
+| 9   | Histórico                  | tabela do histórico; filtros; summary; exportação CSV (F09–F11)                                                               |
+| 10  | Escalação                  | aba de escalação por vagas da formação; aviso de incompleta (F12)                                                             |
+| 11  | Partidas                   | nova partida com duelos; histórico com filtro; detalhes; classificação (F13, F14)                                             |
+| 12  | Responsividade             | ajustes para 375 px (F5)                                                                                                      |
+| 13  | Docker                     | Dockerfile + nginx com fallback de SPA                                                                                        |
+| 14  | README                     | README com todos os itens exigidos                                                                                            |

@@ -14,7 +14,7 @@ Chrome (1366 × 768).
 | npm          | o que acompanha o Node 22                                                   |
 | Vite         | 8.x                                                                         |
 | React        | 19.x                                                                        |
-| React Router | 8.4.x (modo biblioteca/declarativo)                                         |
+| React Router | 8.4.x (modo Declarative)                                                    |
 | Tailwind CSS | 4.x                                                                         |
 | TypeScript   | 7.x                                                                         |
 

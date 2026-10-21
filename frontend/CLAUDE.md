@@ -25,7 +25,7 @@ Se algo aqui divergir do enunciado original, **o enunciado prevalece** — corri
 ## Stack (obrigatória — tecnologia fora da lista elimina)
 
 - **React 19 + TypeScript**, projeto criado com **Vite 8** (template `react-ts`), Node.js **22 LTS**
-- **React Router no modo biblioteca** (declarativo: `BrowserRouter`/`Routes`/`Route`, pacote `react-router`).
+- **React Router no modo Declarative** (`BrowserRouter`/`Routes`/`Route`, pacote `react-router`).
   **Nunca** o modo framework: sem `@react-router/dev`, sem `react-router.config.ts`, sem plugin `reactRouter()`,
   sem loaders/actions/SSR. Remix, CRA, Next, Angular e Vue são proibidos.
 - **Tailwind CSS v4** via `@tailwindcss/vite` (tokens em `src/index.css`)
