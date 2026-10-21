@@ -13,6 +13,11 @@ export class ApiError extends Error {
   }
 }
 
+/** The API `message` of a refusal, or `fallback` for any other failure. */
+export function errorMessageOf(error: unknown, fallback: string): string {
+  return error instanceof ApiError ? error.message : fallback
+}
+
 type QueryValue = string | number | boolean | undefined
 export type QueryParams = Record<string, QueryValue>
 

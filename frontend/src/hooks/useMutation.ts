@@ -1,14 +1,10 @@
 import { useCallback, useRef, useState } from 'react'
-import { ApiError } from '../services/api/httpClient'
+import { errorMessageOf } from '../services/api/httpClient'
 
 const UNEXPECTED_ERROR_MESSAGE = 'Erro inesperado. Tente novamente.'
 
 interface MutationOptions<TResult> {
   onSuccess?: (result: TResult) => void
-}
-
-function toErrorMessage(error: unknown): string {
-  return error instanceof ApiError ? error.message : UNEXPECTED_ERROR_MESSAGE
 }
 
 /**
@@ -35,7 +31,7 @@ export function useMutation<TInput, TResult>(
         const result = await action(input)
         onSuccess?.(result)
       } catch (error) {
-        setErrorMessage(toErrorMessage(error))
+        setErrorMessage(errorMessageOf(error, UNEXPECTED_ERROR_MESSAGE))
       } finally {
         pending.current = false
         setIsSubmitting(false)

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { ApiError } from '../services/api/httpClient'
+import { errorMessageOf } from '../services/api/httpClient'
 
 const UNEXPECTED_ERROR_MESSAGE = 'Erro inesperado ao carregar os dados.'
 
@@ -30,8 +30,7 @@ export function useApiQuery<T>(load: () => Promise<T>) {
       })
       .catch((error: unknown) => {
         if (isCurrent) {
-          const message = error instanceof ApiError ? error.message : UNEXPECTED_ERROR_MESSAGE
-          setResult({ request, data: null, error: message })
+          setResult({ request, data: null, error: errorMessageOf(error, UNEXPECTED_ERROR_MESSAGE) })
         }
       })
     return () => {
