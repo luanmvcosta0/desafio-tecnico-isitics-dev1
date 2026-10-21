@@ -1,13 +1,17 @@
 package com.dev1_isitics.ligahub_be.modules.market;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.dev1_isitics.ligahub_be.support.PlayerRequests;
 import com.dev1_isitics.ligahub_be.support.PostgresIntegrationTest;
+import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -107,10 +111,52 @@ class HistoryIntegrationTest extends PostgresIntegrationTest {
     mockMvc
         .perform(get("/api/v1/clubs/1/transactions?" + query))
         .andExpect(status().isBadRequest());
+    mockMvc
+        .perform(get("/api/v1/clubs/1/transactions/export?" + query))
+        .andExpect(status().isBadRequest())
+        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.message").isNotEmpty());
   }
 
   @Test
   void answersNotFoundForUnknownClubInJson() throws Exception {
     mockMvc.perform(get("/api/v1/clubs/9/transactions")).andExpect(status().isNotFound());
+    mockMvc
+        .perform(get("/api/v1/clubs/9/transactions/export"))
+        .andExpect(status().isNotFound())
+        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+  }
+
+  @Test
+  void exportsTheCsvByteByByte() throws Exception {
+    byte[] csv =
+        mockMvc
+            .perform(get("/api/v1/clubs/1/transactions/export"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith("text/csv"))
+            .andExpect(header().exists("Content-Disposition"))
+            .andReturn()
+            .getResponse()
+            .getContentAsByteArray();
+
+    assertThat(new String(csv, StandardCharsets.UTF_8))
+        .isEqualTo(
+            "data_hora;tipo;jogador;valor;taxa_ou_comissao;multa;lucro;variacao_caixa\n"
+                + "2026-11-05T16:40:00-03:00;COMPRA;\"Zé \"\"Foguete\"\"; Lima\";20,00;0,00;0,00;;-20,00\n"
+                + "2026-11-05T16:40:00-03:00;VENDA;Meia Lua;40,00;0,30;4,00;3,00;35,70\n"
+                + "2026-11-02T10:15:00-03:00;COMPRA;Meia Lua;37,00;1,85;0,00;;-38,85\n");
+    assertThat(csv[0]).isEqualTo((byte) 'd');
+  }
+
+  @Test
+  void exportsOnlyTheHeaderWhenTheFilterMatchesNothing() throws Exception {
+    mockMvc
+        .perform(get("/api/v1/clubs/1/transactions/export?type=VENDA&player_id=" + zeFoguete))
+        .andExpect(status().isOk())
+        .andExpect(
+            content()
+                .bytes(
+                    "data_hora;tipo;jogador;valor;taxa_ou_comissao;multa;lucro;variacao_caixa\n"
+                        .getBytes(StandardCharsets.UTF_8)));
   }
 }
