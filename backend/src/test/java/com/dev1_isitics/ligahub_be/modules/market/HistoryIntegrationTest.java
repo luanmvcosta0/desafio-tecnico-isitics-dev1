@@ -169,7 +169,8 @@ class HistoryIntegrationTest extends PostgresIntegrationTest {
     assertThat(new String(csv, StandardCharsets.UTF_8))
         .isEqualTo(
             "data_hora;tipo;jogador;valor;taxa_ou_comissao;multa;lucro;variacao_caixa\n"
-                + "2026-11-05T16:40:00-03:00;COMPRA;\"Zé \"\"Foguete\"\"; Lima\";20,00;0,00;0,00;;-20,00\n"
+                + "2026-11-05T16:40:00-03:00;COMPRA;\"Zé \"\"Foguete\"\"; Lima\";"
+                + "20,00;0,00;0,00;;-20,00\n"
                 + "2026-11-05T16:40:00-03:00;VENDA;Meia Lua;40,00;0,30;4,00;3,00;35,70\n"
                 + "2026-11-02T10:15:00-03:00;COMPRA;Meia Lua;37,00;1,85;0,00;;-38,85\n");
     assertThat(csv[0]).isEqualTo((byte) 'd');

@@ -43,7 +43,8 @@ class PlayerManagementIntegrationTest extends PostgresIntegrationTest {
 
   private void joinClub() {
     jdbcTemplate.update(
-        "INSERT INTO clubes (nome, sigla, caixa, criado_em) VALUES ('Águias FC', 'AGU', 300, now())");
+        "INSERT INTO clubes (nome, sigla, caixa, criado_em) "
+            + "VALUES ('Águias FC', 'AGU', 300, now())");
     jdbcTemplate.update("UPDATE jogadores SET clube_id = 1 WHERE id = ?", playerId);
   }
 
