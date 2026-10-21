@@ -1,8 +1,11 @@
 package com.dev1_isitics.ligahub_be.support;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.testcontainers.DockerClientFactory;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -11,7 +14,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
  * Base of the integration tests: the whole application against a real PostgreSQL 16 started by
  * Testcontainers (the same image of the compose). The container is shared by every test class and
  * lives until the JVM exits, so the cached Spring context always points to a running database.
- * Skipped when no Docker daemon is available.
+ * Every test starts with empty tables. Skipped when no Docker daemon is available.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -25,5 +28,14 @@ public abstract class PostgresIntegrationTest {
     if (DockerClientFactory.instance().isDockerAvailable()) {
       POSTGRES.start();
     }
+  }
+
+  @Autowired protected JdbcTemplate jdbcTemplate;
+
+  @BeforeEach
+  void resetDatabase() {
+    jdbcTemplate.execute(
+        "TRUNCATE duelos_partida, partidas, escalacoes, transacoes, contratos, jogadores, clubes"
+            + " RESTART IDENTITY CASCADE");
   }
 }
