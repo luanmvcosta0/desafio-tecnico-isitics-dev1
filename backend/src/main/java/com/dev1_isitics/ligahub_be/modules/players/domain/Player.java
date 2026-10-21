@@ -19,7 +19,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * Market value and overall are derived on every read (RN05, RN06) and therefore are not fields of
- * this entity. The club is referenced by id to keep the players aggregate independent of clubs.
+ * this entity: {@link #overall()} and {@link #marketValue()} delegate to their calculators. The
+ * club is referenced by id to keep the players aggregate independent of clubs.
  */
 @Entity
 @Table(name = "jogadores")
@@ -69,4 +70,35 @@ public class Player {
   @UpdateTimestamp
   @Column(name = "atualizado_em", nullable = false)
   private Instant updatedAt;
+
+  /**
+   * Registers a free and fit player (RN06): the base value is computed once, from the overall and
+   * age at registration, and never changes afterwards.
+   */
+  public static Player register(
+      String name,
+      Position position,
+      int agility,
+      int age,
+      TechnicalAttributes attributes,
+      int potential) {
+    Player player = new Player();
+    player.name = name;
+    player.position = position;
+    player.agility = agility;
+    player.age = age;
+    player.attributes = attributes;
+    player.potential = potential;
+    player.condition = Condition.APTO;
+    player.baseValue = BaseValueCalculator.calculate(player.overall(), potential, age);
+    return player;
+  }
+
+  public int overall() {
+    return OverallCalculator.calculate(position, attributes);
+  }
+
+  public BigDecimal marketValue() {
+    return MarketValueCalculator.calculate(baseValue, condition, agility, age);
+  }
 }

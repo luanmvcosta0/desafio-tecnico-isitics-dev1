@@ -2,6 +2,7 @@ package com.dev1_isitics.ligahub_be.modules.players.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,4 +32,12 @@ public class TechnicalAttributes {
 
   @Column(name = "fisico", nullable = false)
   private int physical;
+
+  public int highest() {
+    return IntStream.of(pace, shooting, passing, dribbling, defending, physical).max().orElseThrow();
+  }
+
+  public int sum() {
+    return pace + shooting + passing + dribbling + defending + physical;
+  }
 }
