@@ -1,5 +1,5 @@
-import { Alert } from '../../components/ui/Alert'
-import { Button } from '../../components/ui/Button'
+import { Alert } from './Alert'
+import { Button } from './Button'
 
 interface FormActionsProps {
   submitLabel: string
@@ -8,7 +8,7 @@ interface FormActionsProps {
   onCancel: () => void
 }
 
-/** API refusal message plus the cancel and submit buttons of the player forms. */
+/** API refusal message plus the cancel and submit buttons of every form. */
 export function FormActions({
   submitLabel,
   isSubmitting,

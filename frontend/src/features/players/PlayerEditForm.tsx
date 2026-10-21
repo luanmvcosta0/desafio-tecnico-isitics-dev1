@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useMutation } from '../../hooks/useMutation'
 import { updatePlayer } from '../../services/api/playersApi'
 import type { Player, PlayerUpdateInput } from '../../types/player'
-import { FormActions } from './FormActions'
+import { FormActions } from '../../components/ui/FormActions'
 import { PlayerProfileFields } from './PlayerProfileFields'
 import { playerUpdateSchema, type PlayerUpdateValues } from './playerSchemas'
 

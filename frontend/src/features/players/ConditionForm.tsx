@@ -7,7 +7,7 @@ import { Select } from '../../components/ui/Select'
 import { useMutation } from '../../hooks/useMutation'
 import { changePlayerCondition } from '../../services/api/playersApi'
 import { CONDITIONS, type Condition, type Player } from '../../types/player'
-import { FormActions } from './FormActions'
+import { FormActions } from '../../components/ui/FormActions'
 import { conditionLabels } from './playerLabels'
 import { conditionChangeSchema, type ConditionChangeValues } from './playerSchemas'
 
