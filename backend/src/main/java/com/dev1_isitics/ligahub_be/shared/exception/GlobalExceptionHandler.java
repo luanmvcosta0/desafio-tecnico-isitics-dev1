@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -28,6 +29,8 @@ public class GlobalExceptionHandler {
       "O campo %s está em formato inválido ou fora do tipo esperado.";
   private static final String NOT_FOUND_MESSAGE = "Recurso não encontrado.";
   private static final String INVALID_PARAMETER_MESSAGE = "Parâmetro inválido: %s.";
+  private static final String CONFLICT_MESSAGE =
+      "A operação viola uma restrição de unicidade (nome ou sigla já cadastrados).";
   private static final String METHOD_NOT_ALLOWED_MESSAGE = "Método não permitido neste recurso.";
   private static final String UNEXPECTED_ERROR_MESSAGE =
       "Erro inesperado. Nenhuma alteração foi gravada.";
@@ -86,6 +89,13 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleMethodNotAllowed(
       HttpRequestMethodNotSupportedException exception) {
     return respond(HttpStatus.METHOD_NOT_ALLOWED, METHOD_NOT_ALLOWED_MESSAGE);
+  }
+
+  /** Safety net for concurrent requests that pass the service checks but hit a unique index. */
+  @ExceptionHandler(DataIntegrityViolationException.class)
+  public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(
+      DataIntegrityViolationException exception) {
+    return respond(HttpStatus.CONFLICT, CONFLICT_MESSAGE);
   }
 
   @ExceptionHandler(Exception.class)
