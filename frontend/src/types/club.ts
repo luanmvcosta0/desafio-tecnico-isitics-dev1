@@ -1,3 +1,5 @@
+import type { Player } from './player'
+
 export type ClubSort = 'name' | 'net_worth_desc' | 'net_worth_asc'
 
 export interface Club {
@@ -12,4 +14,17 @@ export interface Club {
 export interface ClubCreateInput {
   name: string
   acronym: string
+}
+
+export interface SquadPlayer extends Player {
+  contract: {
+    purchase_value: number
+    loyalty_until: string
+    remaining_days: number
+    penalty_rate: number
+  } | null
+}
+
+export interface ClubDetails extends Club {
+  players: SquadPlayer[]
 }
