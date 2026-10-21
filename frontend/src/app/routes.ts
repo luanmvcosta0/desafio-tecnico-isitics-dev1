@@ -9,3 +9,7 @@ export const routes = {
 export function clubDetailsPath(clubId: number): string {
   return `${routes.clubs}/${clubId}`
 }
+
+export function matchDetailsPath(matchId: number): string {
+  return `${routes.matches}/${matchId}`
+}
