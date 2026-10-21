@@ -34,7 +34,9 @@ public class TechnicalAttributes {
   private int physical;
 
   public int highest() {
-    return IntStream.of(pace, shooting, passing, dribbling, defending, physical).max().orElseThrow();
+    return IntStream.of(pace, shooting, passing, dribbling, defending, physical)
+        .max()
+        .orElseThrow();
   }
 
   public int sum() {

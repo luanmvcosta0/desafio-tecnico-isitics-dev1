@@ -24,7 +24,10 @@ public record TransactionSummary(
 
   public static TransactionSummary of(List<Transaction> transactions) {
     return new TransactionSummary(
-        sum(transactions, PURCHASES, transaction -> transaction.getValue().add(transaction.getFee())),
+        sum(
+            transactions,
+            PURCHASES,
+            transaction -> transaction.getValue().add(transaction.getFee())),
         sum(transactions, SALES, Transaction::getCashChange),
         sum(transactions, transaction -> true, Transaction::getFee),
         sum(transactions, SALES, Transaction::getPenalty),

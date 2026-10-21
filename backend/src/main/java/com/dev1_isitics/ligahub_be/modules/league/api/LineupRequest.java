@@ -11,6 +11,9 @@ import org.hibernate.validator.constraints.UniqueElements;
 public record LineupRequest(
     @NotNull Formation formation,
     @NotNull
-        @Size(min = Formation.STARTERS, max = Formation.STARTERS, message = "deve ter exatamente 5 ids")
+        @Size(
+            min = Formation.STARTERS,
+            max = Formation.STARTERS,
+            message = "deve ter exatamente 5 ids")
         @UniqueElements(message = "não pode repetir jogadores")
         List<@NotNull @Positive Integer> playerIds) {}

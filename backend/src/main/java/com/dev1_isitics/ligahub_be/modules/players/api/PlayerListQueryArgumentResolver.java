@@ -9,7 +9,9 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-/** Hands a validated {@link PlayerListQuery} to the controller, parsed from the raw query params. */
+/**
+ * Hands a validated {@link PlayerListQuery} to the controller, parsed from the raw query params.
+ */
 public class PlayerListQueryArgumentResolver implements HandlerMethodArgumentResolver {
 
   @Override

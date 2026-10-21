@@ -16,5 +16,8 @@ import jakarta.validation.constraints.Pattern;
 public record ClubCreateRequest(
     @NotNull @NormalizedText @TextLength(min = NAME_MIN_LENGTH, max = NAME_MAX_LENGTH) @ClubName
         String name,
-    @NotNull @Pattern(regexp = ACRONYM_PATTERN, message = "deve ter exatamente 3 letras de A a Z maiúsculas")
+    @NotNull
+        @Pattern(
+            regexp = ACRONYM_PATTERN,
+            message = "deve ter exatamente 3 letras de A a Z maiúsculas")
         String acronym) {}

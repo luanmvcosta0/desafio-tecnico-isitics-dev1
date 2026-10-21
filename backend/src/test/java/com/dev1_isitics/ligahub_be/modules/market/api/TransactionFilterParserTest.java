@@ -18,7 +18,8 @@ class TransactionFilterParserTest {
     TransactionFilter filter =
         TransactionFilterParser.parse(Map.of("type", "VENDA,COMPRA", "player_id", "7"));
 
-    assertThat(filter.types()).containsExactlyInAnyOrder(TransactionType.COMPRA, TransactionType.VENDA);
+    assertThat(filter.types())
+        .containsExactlyInAnyOrder(TransactionType.COMPRA, TransactionType.VENDA);
     assertThat(filter.playerId()).isEqualTo(7);
   }
 

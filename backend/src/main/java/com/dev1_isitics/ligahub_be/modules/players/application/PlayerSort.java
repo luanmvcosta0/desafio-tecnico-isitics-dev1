@@ -19,8 +19,7 @@ public enum PlayerSort {
   POSITION("position", "position", Comparator.comparing(Player::getPosition));
 
   /** Tie-break of every listing: alphabetical name, then ascending id. */
-  public static final Comparator<Player> TIE_BREAK =
-      NAME.comparator.thenComparing(Player::getId);
+  public static final Comparator<Player> TIE_BREAK = NAME.comparator.thenComparing(Player::getId);
 
   /** Squad order (RN11): position GOL, ZAG, LAT, MEI, ATA, then name, then id. */
   public static final Comparator<Player> SQUAD_ORDER = POSITION.comparator.thenComparing(TIE_BREAK);

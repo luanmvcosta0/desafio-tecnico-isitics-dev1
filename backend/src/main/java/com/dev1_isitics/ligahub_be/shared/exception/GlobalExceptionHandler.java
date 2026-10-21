@@ -61,7 +61,8 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<ErrorResponse> handleInvalidBody(MethodArgumentNotValidException exception) {
+  public ResponseEntity<ErrorResponse> handleInvalidBody(
+      MethodArgumentNotValidException exception) {
     String message =
         exception.getBindingResult().getAllErrors().stream()
             .findFirst()

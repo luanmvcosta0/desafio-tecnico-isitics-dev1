@@ -26,7 +26,9 @@ public final class BaseValueCalculator {
         TIERS.stream().map(tier -> tier.valueFor(overall)).reduce(BigDecimal.ZERO, BigDecimal::add);
     BigDecimal value =
         age <= YOUNG_PROSPECT_MAX_AGE
-            ? overallPart.multiply(BigDecimal.valueOf(PERCENT + potential - overall)).movePointLeft(2)
+            ? overallPart
+                .multiply(BigDecimal.valueOf(PERCENT + potential - overall))
+                .movePointLeft(2)
             : overallPart;
     return Money.round(value).max(MINIMUM_VALUE);
   }

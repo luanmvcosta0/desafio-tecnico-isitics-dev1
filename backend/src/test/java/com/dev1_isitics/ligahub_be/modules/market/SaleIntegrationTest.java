@@ -103,9 +103,7 @@ class SaleIntegrationTest extends PostgresIntegrationTest {
         .andExpect(jsonPath("$.contract_status").value("RESCINDIDO"))
         .andExpect(jsonPath("$.club_cash").value(296.85));
 
-    mockMvc
-        .perform(get("/api/v1/players/" + PLAYER_ID))
-        .andExpect(jsonPath("$.club_id").isEmpty());
+    mockMvc.perform(get("/api/v1/players/" + PLAYER_ID)).andExpect(jsonPath("$.club_id").isEmpty());
     mockMvc.perform(get("/api/v1/clubs/1")).andExpect(jsonPath("$.players").isEmpty());
     BigDecimal cashChanges =
         jdbcTemplate.queryForObject(

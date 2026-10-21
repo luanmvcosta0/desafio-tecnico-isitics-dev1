@@ -20,8 +20,7 @@ public class LineupController {
 
   @PutMapping
   public LineupResponse save(@PathVariable Integer id, @Valid @RequestBody LineupRequest request) {
-    return LineupResponse.from(
-        lineupService.save(id, request.formation(), request.playerIds()));
+    return LineupResponse.from(lineupService.save(id, request.formation(), request.playerIds()));
   }
 
   @GetMapping

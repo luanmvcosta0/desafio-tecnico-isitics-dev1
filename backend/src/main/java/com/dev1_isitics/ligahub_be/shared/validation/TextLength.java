@@ -8,8 +8,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Inclusive text size counted in Unicode code points (V4), unlike {@code @Size}, which counts UTF-16
- * units. A {@code null} value is valid; combine with {@code @NotNull} when the field is required.
+ * Inclusive text size counted in Unicode code points (V4), unlike {@code @Size}, which counts
+ * UTF-16 units. A {@code null} value is valid; combine with {@code @NotNull} when the field is
+ * required.
  */
 @Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

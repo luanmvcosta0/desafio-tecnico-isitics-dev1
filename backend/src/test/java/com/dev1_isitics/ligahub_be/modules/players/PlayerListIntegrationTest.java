@@ -65,7 +65,8 @@ class PlayerListIntegrationTest extends PostgresIntegrationTest {
     list("")
         .andExpect(
             jsonPath(
-                "$.data[*].name", contains("Delta Lima", "Épsilon Dias", "João Silva", "Meia Lua")));
+                "$.data[*].name",
+                contains("Delta Lima", "Épsilon Dias", "João Silva", "Meia Lua")));
   }
 
   @Test
@@ -80,9 +81,7 @@ class PlayerListIntegrationTest extends PostgresIntegrationTest {
                 contains("João Silva", "Delta Lima", "Delta Lima", "Meia Lua", "Épsilon Dias")))
         .andExpect(jsonPath("$.data[1].position").value("ZAG"));
     list("sort=position,age_desc")
-        .andExpect(
-            jsonPath(
-                "$.data[*].position", contains("GOL", "ZAG", "MEI", "MEI", "ATA")));
+        .andExpect(jsonPath("$.data[*].position", contains("GOL", "ZAG", "MEI", "MEI", "ATA")));
   }
 
   @Test

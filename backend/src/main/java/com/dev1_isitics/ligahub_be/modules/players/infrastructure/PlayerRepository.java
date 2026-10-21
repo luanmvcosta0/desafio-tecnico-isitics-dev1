@@ -11,7 +11,8 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface PlayerRepository extends JpaRepository<Player, Integer>, JpaSpecificationExecutor<Player> {
+public interface PlayerRepository
+    extends JpaRepository<Player, Integer>, JpaSpecificationExecutor<Player> {
 
   /** Deleted players count as nonexistent everywhere (RN09). */
   Optional<Player> findByIdAndDeletedAtIsNull(Integer id);

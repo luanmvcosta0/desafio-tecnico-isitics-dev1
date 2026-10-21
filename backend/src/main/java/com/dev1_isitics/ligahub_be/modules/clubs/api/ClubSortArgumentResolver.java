@@ -29,7 +29,8 @@ public class ClubSortArgumentResolver implements HandlerMethodArgumentResolver {
     QueryParams params = new QueryParams(value == null ? Map.of() : Map.of(SORT, value));
     return params
         .text(SORT)
-        .map(sort -> ClubSort.fromParameter(sort).orElseThrow(() -> QueryParams.invalid(SORT, sort)))
+        .map(
+            sort -> ClubSort.fromParameter(sort).orElseThrow(() -> QueryParams.invalid(SORT, sort)))
         .orElse(ClubSort.NAME);
   }
 }

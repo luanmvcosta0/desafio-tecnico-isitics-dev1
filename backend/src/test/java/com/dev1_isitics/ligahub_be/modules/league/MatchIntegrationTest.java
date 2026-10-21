@@ -36,8 +36,7 @@ class MatchIntegrationTest extends PostgresIntegrationTest {
 
   @Autowired private MockMvc mockMvc;
 
-  private ResultActions send(MockHttpServletRequestBuilder request, String body)
-      throws Exception {
+  private ResultActions send(MockHttpServletRequestBuilder request, String body) throws Exception {
     return mockMvc.perform(request.contentType(MediaType.APPLICATION_JSON).content(body));
   }
 
@@ -149,9 +148,7 @@ class MatchIntegrationTest extends PostgresIntegrationTest {
     assertThat(jdbcTemplate.queryForObject("SELECT sum(caixa) FROM clubes", BigDecimal.class))
         .isEqualByComparingTo("900.00");
     assertThat(count("escalacoes")).isEqualTo(10);
-    mockMvc
-        .perform(get("/api/v1/clubs/1/lineup"))
-        .andExpect(jsonPath("$.complete").value(true));
+    mockMvc.perform(get("/api/v1/clubs/1/lineup")).andExpect(jsonPath("$.complete").value(true));
   }
 
   @ParameterizedTest

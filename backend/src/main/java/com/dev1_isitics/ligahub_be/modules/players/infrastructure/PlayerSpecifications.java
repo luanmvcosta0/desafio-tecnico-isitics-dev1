@@ -31,7 +31,9 @@ public final class PlayerSpecifications {
       }
       if (query.free() != null) {
         predicates.add(
-            query.free() ? builder.isNull(root.get("clubId")) : builder.isNotNull(root.get("clubId")));
+            query.free()
+                ? builder.isNull(root.get("clubId"))
+                : builder.isNotNull(root.get("clubId")));
       }
       return builder.and(predicates.toArray(Predicate[]::new));
     };

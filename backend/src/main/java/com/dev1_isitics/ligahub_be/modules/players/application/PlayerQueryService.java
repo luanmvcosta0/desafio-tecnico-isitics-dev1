@@ -69,7 +69,9 @@ public class PlayerQueryService {
     long totalPages = (total + limit - 1) / limit;
     long offset = (long) (page - 1) * limit;
     List<Player> items =
-        offset >= total ? List.of() : players.subList((int) offset, (int) Math.min(total, offset + limit));
+        offset >= total
+            ? List.of()
+            : players.subList((int) offset, (int) Math.min(total, offset + limit));
     return new PlayerPage(items, page, limit, total, totalPages);
   }
 }

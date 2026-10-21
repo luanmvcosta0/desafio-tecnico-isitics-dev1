@@ -8,7 +8,10 @@ import java.util.Optional;
 
 /** Sort of {@code GET /clubs} (RN11): ties are broken by alphabetical name, then ascending id. */
 public enum ClubSort {
-  NAME("name", Comparator.comparing(valuation -> valuation.club().getName(), AlphabeticalComparator.INSTANCE)),
+  NAME(
+      "name",
+      Comparator.comparing(
+          valuation -> valuation.club().getName(), AlphabeticalComparator.INSTANCE)),
   NET_WORTH_ASC("net_worth_asc", Comparator.comparing(ClubValuation::netWorth)),
   NET_WORTH_DESC("net_worth_desc", Comparator.comparing(ClubValuation::netWorth).reversed());
 

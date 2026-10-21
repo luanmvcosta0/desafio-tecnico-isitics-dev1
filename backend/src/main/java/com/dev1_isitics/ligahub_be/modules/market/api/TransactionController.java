@@ -38,7 +38,10 @@ public class TransactionController {
         .contentType(TEXT_CSV)
         .header(
             HttpHeaders.CONTENT_DISPOSITION,
-            ContentDisposition.attachment().filename(CSV_FILE_NAME.formatted(id)).build().toString())
+            ContentDisposition.attachment()
+                .filename(CSV_FILE_NAME.formatted(id))
+                .build()
+                .toString())
         .body(csv);
   }
 }

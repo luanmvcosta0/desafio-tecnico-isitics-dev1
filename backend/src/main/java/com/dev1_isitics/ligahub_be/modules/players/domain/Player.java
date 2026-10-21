@@ -94,7 +94,9 @@ public class Player {
     return player;
   }
 
-  /** Edition (RN08): only these four fields change; attributes and base value stay as registered. */
+  /**
+   * Edition (RN08): only these four fields change; attributes and base value stay as registered.
+   */
   public void edit(String name, Position position, int agility, int age) {
     this.name = name;
     this.position = position;

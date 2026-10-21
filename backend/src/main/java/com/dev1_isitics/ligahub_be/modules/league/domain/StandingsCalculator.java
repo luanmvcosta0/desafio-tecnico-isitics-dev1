@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Standings of every club, including those that never played (RN21): win 3, draw 1, loss 0,
- * ordered by points, goal difference, goals for, alphabetical name and id, numbered from 1.
+ * Standings of every club, including those that never played (RN21): win 3, draw 1, loss 0, ordered
+ * by points, goal difference, goals for, alphabetical name and id, numbered from 1.
  */
 public final class StandingsCalculator {
 

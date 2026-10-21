@@ -10,7 +10,6 @@ public record TransactionHistoryResponse(
 
   public static TransactionHistoryResponse from(TransactionHistory history) {
     return new TransactionHistoryResponse(
-        history.transactions().stream().map(TransactionResponse::from).toList(),
-        history.summary());
+        history.transactions().stream().map(TransactionResponse::from).toList(), history.summary());
   }
 }

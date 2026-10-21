@@ -42,13 +42,40 @@ class HistoryIntegrationTest extends PostgresIntegrationTest {
     meiaLua = PlayerRequests.register(mockMvc, "Meia Lua", "MEI", 25);
     zeFoguete = PlayerRequests.register(mockMvc, "Zé Foguete Lima", "ATA", 25);
     jdbcTemplate.update(
-        INSERT, 1, meiaLua, "Meia Lua", "COMPRA", 37, 1.85, 0, null, -38.85,
+        INSERT,
+        1,
+        meiaLua,
+        "Meia Lua",
+        "COMPRA",
+        37,
+        1.85,
+        0,
+        null,
+        -38.85,
         "2026-11-02T10:15:00-03:00");
     jdbcTemplate.update(
-        INSERT, 1, meiaLua, "Meia Lua", "VENDA", 40, 0.30, 4, 3, 35.70,
+        INSERT,
+        1,
+        meiaLua,
+        "Meia Lua",
+        "VENDA",
+        40,
+        0.30,
+        4,
+        3,
+        35.70,
         "2026-11-05T16:40:00-03:00");
     jdbcTemplate.update(
-        INSERT, 1, zeFoguete, "Zé \"Foguete\"; Lima", "COMPRA", 20, 0, 0, null, -20,
+        INSERT,
+        1,
+        zeFoguete,
+        "Zé \"Foguete\"; Lima",
+        "COMPRA",
+        20,
+        0,
+        0,
+        null,
+        -20,
         "2026-11-05T16:40:00-03:00");
   }
 

@@ -32,7 +32,8 @@ class JacksonConfigTest {
 
   @Test
   void readsSnakeCaseFields() throws JsonProcessingException {
-    SampleRequest request = read("{\"player_name\": \"Meia Lua\", \"age\": 25, \"position\": \"MEI\"}");
+    SampleRequest request =
+        read("{\"player_name\": \"Meia Lua\", \"age\": 25, \"position\": \"MEI\"}");
 
     assertThat(request).isEqualTo(new SampleRequest("Meia Lua", 25, Position.MEI));
   }

@@ -104,7 +104,11 @@ class PlayerListQueryParserTest {
   }
 
   @ParameterizedTest
-  @CsvSource({"free, true, club_id, 1", "min_age, 30, max_age, 20", "min_value, 10, max_value, 9.99"})
+  @CsvSource({
+    "free, true, club_id, 1",
+    "min_age, 30, max_age, 20",
+    "min_value, 10, max_value, 9.99"
+  })
   void rejectsContradictoryFilters(String first, String firstValue, String second, String value) {
     assertThatThrownBy(() -> PlayerListQueryParser.parse(Map.of(first, firstValue, second, value)))
         .isInstanceOf(InvalidRequestException.class);

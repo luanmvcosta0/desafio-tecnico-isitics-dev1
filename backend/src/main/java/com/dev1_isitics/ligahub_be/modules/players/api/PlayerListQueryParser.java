@@ -53,8 +53,10 @@ public final class PlayerListQueryParser {
     Integer clubId = params.positiveInteger("club_id").orElse(null);
     int minAge = params.integerBetween("min_age", AGE_MIN, AGE_MAX).orElse(AGE_MIN);
     int maxAge = params.integerBetween("max_age", AGE_MIN, AGE_MAX).orElse(AGE_MAX);
-    BigDecimal minValue = params.decimalBetween("min_value", VALUE_MIN, VALUE_MAX).orElse(VALUE_MIN);
-    BigDecimal maxValue = params.decimalBetween("max_value", VALUE_MIN, VALUE_MAX).orElse(VALUE_MAX);
+    BigDecimal minValue =
+        params.decimalBetween("min_value", VALUE_MIN, VALUE_MAX).orElse(VALUE_MIN);
+    BigDecimal maxValue =
+        params.decimalBetween("max_value", VALUE_MIN, VALUE_MAX).orElse(VALUE_MAX);
     List<PlayerSort> sorts =
         params.text("sort").map(PlayerListQueryParser::parseSorts).orElse(List.of(PlayerSort.NAME));
     int page = params.positiveInteger("page").orElse(DEFAULT_PAGE);

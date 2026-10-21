@@ -6,8 +6,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * Validated filters, sorting and page of {@code GET /players}. Absent optional filters are
- * {@code null}; ranges already hold their extremes when only one limit was informed.
+ * Validated filters, sorting and page of {@code GET /players}. Absent optional filters are {@code
+ * null}; ranges already hold their extremes when only one limit was informed.
  */
 public record PlayerListQuery(
     String search,

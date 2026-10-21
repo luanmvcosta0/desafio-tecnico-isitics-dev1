@@ -5,7 +5,8 @@ import java.math.BigDecimal;
 
 /**
  * Purchase fee and cash limit (RN13): 5% of the market value, charged only above 30,00, and the
- * total cost may be at most exactly half of the cash before the purchase (no rounding of the limit).
+ * total cost may be at most exactly half of the cash before the purchase (no rounding of the
+ * limit).
  */
 public final class PurchaseFeeCalculator {
 

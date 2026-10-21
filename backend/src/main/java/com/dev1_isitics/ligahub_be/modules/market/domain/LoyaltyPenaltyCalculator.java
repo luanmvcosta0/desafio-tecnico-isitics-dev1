@@ -7,9 +7,9 @@ import java.time.Instant;
 import java.util.List;
 
 /**
- * Loyalty penalty (RN15): remaining days until the end of the loyalty, with fraction and rounded
- * up (0 once it is over), the penalty rate of its bracket and the penalty on the market value,
- * capped at 10,00.
+ * Loyalty penalty (RN15): remaining days until the end of the loyalty, with fraction and rounded up
+ * (0 once it is over), the penalty rate of its bracket and the penalty on the market value, capped
+ * at 10,00.
  */
 public final class LoyaltyPenaltyCalculator {
 

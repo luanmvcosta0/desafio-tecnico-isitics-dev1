@@ -17,12 +17,7 @@ import java.util.List;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record MatchResponse(
-    Integer id,
-    String playedAt,
-    Side home,
-    Side away,
-    MatchResult result,
-    List<Duel> duels) {
+    Integer id, String playedAt, Side home, Side away, MatchResult result, List<Duel> duels) {
 
   public record Side(Integer clubId, String clubName, Formation formation, int goals) {
 

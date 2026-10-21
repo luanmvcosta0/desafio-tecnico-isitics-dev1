@@ -18,8 +18,7 @@ public class StrictIntegerDeserializer extends StdScalarDeserializer<Integer> {
   }
 
   @Override
-  public Integer deserialize(JsonParser parser, DeserializationContext context)
-      throws IOException {
+  public Integer deserialize(JsonParser parser, DeserializationContext context) throws IOException {
     JsonToken token = parser.currentToken();
     if (token == JsonToken.VALUE_NUMBER_INT || token == JsonToken.VALUE_NUMBER_FLOAT) {
       return toExactInteger(parser.getDecimalValue(), context);

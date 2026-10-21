@@ -48,8 +48,7 @@ class LineupIntegrationTest extends PostgresIntegrationTest {
   }
 
   private String lineup(String formation, int... ids) {
-    return "{\"formation\": \"%s\", \"player_ids\": %s}"
-        .formatted(formation, Arrays.toString(ids));
+    return "{\"formation\": \"%s\", \"player_ids\": %s}".formatted(formation, Arrays.toString(ids));
   }
 
   private int starters() {
@@ -177,7 +176,8 @@ class LineupIntegrationTest extends PostgresIntegrationTest {
 
   @Test
   void acceptsUnfitStarters() throws Exception {
-    jdbcTemplate.update("UPDATE jogadores SET condicao = 'MAL_CONDICIONADO' WHERE id = ?", fullBack);
+    jdbcTemplate.update(
+        "UPDATE jogadores SET condicao = 'MAL_CONDICIONADO' WHERE id = ?", fullBack);
 
     saveLineup(1, lineup("2-1-1", attacker, midfielder, goalkeeper, fullBack, defender))
         .andExpect(status().isOk());

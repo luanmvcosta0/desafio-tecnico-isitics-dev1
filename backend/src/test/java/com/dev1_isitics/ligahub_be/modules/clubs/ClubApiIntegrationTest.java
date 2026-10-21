@@ -29,7 +29,8 @@ class ClubApiIntegrationTest extends PostgresIntegrationTest {
         post("/api/v1/clubs")
             .contentType(MediaType.APPLICATION_JSON)
             .content(
-                "{\"name\": \"%s\", \"acronym\": \"%s\", \"cash\": 9999}".formatted(name, acronym)));
+                "{\"name\": \"%s\", \"acronym\": \"%s\", \"cash\": 9999}"
+                    .formatted(name, acronym)));
   }
 
   private int clubCount() {
@@ -66,7 +67,8 @@ class ClubApiIntegrationTest extends PostgresIntegrationTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"{\"name\": \"Águias FC\"}", "{\"acronym\": \"AGU\"}", "[]", "{\"name\": 10}"})
+  @ValueSource(
+      strings = {"{\"name\": \"Águias FC\"}", "{\"acronym\": \"AGU\"}", "[]", "{\"name\": 10}"})
   void refusesInvalidBodyWithoutSaving(String body) throws Exception {
     mockMvc
         .perform(post("/api/v1/clubs").contentType(MediaType.APPLICATION_JSON).content(body))
@@ -129,7 +131,8 @@ class ClubApiIntegrationTest extends PostgresIntegrationTest {
     mockMvc
         .perform(get("/api/v1/clubs/1"))
         .andExpect(
-            jsonPath("$.players[*].name", contains("Rui Prado", "Ana Lima", "Davi Lins", "Otto Rangel")))
+            jsonPath(
+                "$.players[*].name", contains("Rui Prado", "Ana Lima", "Davi Lins", "Otto Rangel")))
         .andExpect(jsonPath("$.squad_value").value(40.00))
         .andExpect(jsonPath("$.net_worth").value(340.00));
   }

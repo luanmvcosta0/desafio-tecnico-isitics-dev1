@@ -51,7 +51,8 @@ public enum Formation {
   /** Whether the positions of the five starters close this formation. */
   public boolean isClosedBy(Collection<Position> positions) {
     Map<Position, Long> counts =
-        positions.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        positions.stream()
+            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     return positions.size() == STARTERS
         && count(counts, Position.GOL) == GOALKEEPERS
         && count(counts, Position.ZAG) + count(counts, Position.LAT) == defenders

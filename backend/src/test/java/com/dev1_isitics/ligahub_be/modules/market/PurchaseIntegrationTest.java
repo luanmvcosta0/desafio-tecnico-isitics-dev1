@@ -87,7 +87,9 @@ class PurchaseIntegrationTest extends PostgresIntegrationTest {
     String response =
         mockMvc
             .perform(
-                post("/api/v1/players").contentType(MediaType.APPLICATION_JSON).content(STAR_PLAYER))
+                post("/api/v1/players")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(STAR_PLAYER))
             .andReturn()
             .getResponse()
             .getContentAsString();

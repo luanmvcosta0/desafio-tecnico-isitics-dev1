@@ -23,7 +23,8 @@ public class AcronymMatchesNameValidator
             .codePoints()
             .filter(Character::isLetter)
             .toArray();
-    return !allEqual(acronym) && startsWithFirstLetter(nameLetters, acronym)
+    return !allEqual(acronym)
+        && startsWithFirstLetter(nameLetters, acronym)
         && isSubsequence(nameLetters, acronym);
   }
 
