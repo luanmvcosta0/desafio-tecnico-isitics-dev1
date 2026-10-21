@@ -80,4 +80,28 @@ public class Transaction {
     transaction.createdAt = createdAt;
     return transaction;
   }
+
+  /** Sale: the fee is the commission and the cash goes up by value minus penalty and fee. */
+  public static Transaction sale(
+      Integer clubId,
+      Integer playerId,
+      String playerName,
+      BigDecimal value,
+      BigDecimal commission,
+      BigDecimal penalty,
+      BigDecimal profit,
+      Instant createdAt) {
+    Transaction transaction = new Transaction();
+    transaction.clubId = clubId;
+    transaction.playerId = playerId;
+    transaction.playerName = playerName;
+    transaction.type = TransactionType.VENDA;
+    transaction.value = value;
+    transaction.fee = commission;
+    transaction.penalty = penalty;
+    transaction.profit = profit;
+    transaction.cashChange = value.subtract(penalty).subtract(commission);
+    transaction.createdAt = createdAt;
+    return transaction;
+  }
 }

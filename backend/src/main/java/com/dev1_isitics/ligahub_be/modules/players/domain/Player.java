@@ -116,6 +116,10 @@ public class Player {
     this.clubId = clubId;
   }
 
+  public void leaveClub() {
+    this.clubId = null;
+  }
+
   public boolean isFree() {
     return clubId == null;
   }

@@ -62,4 +62,10 @@ public class Contract {
     contract.startedAt = startedAt;
     return contract;
   }
+
+  /** On sale: RESCINDIDO when a penalty is due, ENCERRADO when the loyalty was fulfilled (RN15). */
+  public void end(boolean withPenalty, Instant endedAt) {
+    this.status = withPenalty ? ContractStatus.RESCINDIDO : ContractStatus.ENCERRADO;
+    this.endedAt = endedAt;
+  }
 }
