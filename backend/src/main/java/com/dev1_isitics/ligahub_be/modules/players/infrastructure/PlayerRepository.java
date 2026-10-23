@@ -21,7 +21,10 @@ public interface PlayerRepository
 
   long countByClubIdAndDeletedAtIsNull(Integer clubId);
 
-  /** Locks the player row so two clubs cannot buy the same player at the same time. */
+  /**
+   * Locks the player row so two clubs cannot buy the same player at the same time, and edits,
+   * condition changes and deletions wait for a purchase or sale in progress.
+   */
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query("select player from Player player where player.id = :id and player.deletedAt is null")
   Optional<Player> findActiveByIdForUpdate(@Param("id") Integer id);

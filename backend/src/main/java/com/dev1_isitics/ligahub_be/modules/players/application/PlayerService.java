@@ -52,7 +52,7 @@ public class PlayerService {
 
   @Transactional
   public Player edit(Integer id, PlayerUpdateRequest request) {
-    Player player = findActive(id);
+    Player player = findActiveForUpdate(id);
     if (!player.isFree() && player.getPosition() != request.position()) {
       throw new BusinessRuleException(POSITION_LOCKED_MESSAGE.formatted(player.getPosition()));
     }
@@ -66,7 +66,7 @@ public class PlayerService {
   /** A starter that becomes DOENTE leaves the lineup in the same transaction (RN19). */
   @Transactional
   public Player changeCondition(Integer id, Condition condition) {
-    Player player = findActive(id);
+    Player player = findActiveForUpdate(id);
     if (player.getCondition() == Condition.DOENTE && condition == Condition.APTO) {
       throw new BusinessRuleException(SICK_TO_FIT_MESSAGE);
     }
@@ -79,10 +79,20 @@ public class PlayerService {
 
   @Transactional
   public void delete(Integer id) {
-    Player player = findActive(id);
+    Player player = findActiveForUpdate(id);
     if (!player.isFree()) {
       throw new BusinessRuleException(DELETE_WITH_CLUB_MESSAGE);
     }
     player.delete(clock.instant());
+  }
+
+  /**
+   * Waits for a concurrent purchase or sale of the player, so the checks see its current club and
+   * the update does not write back a stale {@code clube_id}.
+   */
+  private Player findActiveForUpdate(Integer id) {
+    return playerRepository
+        .findActiveByIdForUpdate(id)
+        .orElseThrow(() -> new PlayerNotFoundException(id));
   }
 }
