@@ -158,6 +158,39 @@ describe('PlayersPage', () => {
     expect(condition).toBe('DOENTE')
   })
 
+  it('goes back to the last page when an action empties the current one', async () => {
+    let condition: Condition = 'APTO'
+    mockApi({
+      'GET /clubs': () => jsonResponse(200, []),
+      'GET /players': (url) => {
+        const page = Number(url.searchParams.get('page'))
+        const isSick = condition === 'DOENTE'
+        if (page === 1) {
+          return jsonResponse(
+            200,
+            aPage([aPlayer({ id: 1, name: 'Jogador Um' })], 1, isSick ? 10 : 11),
+          )
+        }
+        return jsonResponse(200, aPage(isSick ? [] : [aPlayer({ condition })], 2, isSick ? 10 : 11))
+      },
+      'PATCH /players/2/condition': () => {
+        condition = 'DOENTE'
+        return jsonResponse(200, aPlayer({ condition }))
+      },
+    })
+    const user = renderPage()
+    await screen.findByText('Jogador Um')
+    await user.click(screen.getByRole('button', { name: 'Próxima' }))
+    await user.click(await screen.findByRole('button', { name: 'Alterar condição de Meia Lua' }))
+
+    const dialog = within(screen.getByRole('dialog', { name: 'Condição de Meia Lua' }))
+    await user.selectOptions(dialog.getByLabelText('Condição'), 'DOENTE')
+    await user.click(dialog.getByRole('button', { name: 'Salvar condição' }))
+
+    expect(await screen.findByText('Página 1 de 1')).toBeInTheDocument()
+    expect(await screen.findByText('Jogador Um')).toBeInTheDocument()
+  })
+
   it('deletes only free players, after confirmation', async () => {
     let deleted = false
     mockApi({

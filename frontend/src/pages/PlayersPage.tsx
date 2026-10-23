@@ -36,14 +36,15 @@ export function PlayersPage() {
     [clubs.data],
   )
   const removal = useMutation(deletePlayer, {
-    onSuccess: () => {
-      finishAction(`Jogador ${dialog?.player.name} excluído.`)
-      const isLastOfPage = players.data?.data.length === 1 && page > 1
-      if (isLastOfPage) {
-        setPage(page - 1)
-      }
-    },
+    onSuccess: () => finishAction(`Jogador ${dialog?.player.name} excluído.`),
   })
+  const totalPages = players.data?.meta.total_pages
+
+  // An action can take the last player of the page out of the filtered list (deletion, purchase
+  // with "Só livres", condition change with the condition filter): go back to the last page left.
+  if (totalPages !== undefined && totalPages > 0 && page > totalPages) {
+    setPage(totalPages)
+  }
 
   function finishAction(message: string) {
     setDialog(null)
