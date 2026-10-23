@@ -16,7 +16,10 @@ public interface ClubRepository extends JpaRepository<Club, Integer> {
 
   boolean existsByAcronym(String acronym);
 
-  /** Locks the club row so concurrent purchases and sales see the cash already changed. */
+  /**
+   * Locks the club row so concurrent purchases and sales see the cash already changed, and saves of
+   * its lineup do not overlap.
+   */
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query("select club from Club club where club.id = :id")
   Optional<Club> findByIdForUpdate(@Param("id") Integer id);

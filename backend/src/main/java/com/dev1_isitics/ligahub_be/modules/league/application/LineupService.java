@@ -42,7 +42,7 @@ public class LineupService {
 
   @Transactional
   public Lineup save(Integer clubId, Formation formation, List<Integer> playerIds) {
-    Club club = findClub(clubId);
+    Club club = findClubForUpdate(clubId);
     List<Player> starters = playerIds.stream().map(this::findPlayer).toList();
     for (Player starter : starters) {
       if (!club.getId().equals(starter.getClubId())) {
@@ -76,6 +76,13 @@ public class LineupService {
 
   private Club findClub(Integer clubId) {
     return clubRepository.findById(clubId).orElseThrow(() -> new ClubNotFoundException(clubId));
+  }
+
+  /** Two saves of the same lineup run one after the other, so their starters never mix. */
+  private Club findClubForUpdate(Integer clubId) {
+    return clubRepository
+        .findByIdForUpdate(clubId)
+        .orElseThrow(() -> new ClubNotFoundException(clubId));
   }
 
   private Player findPlayer(Integer playerId) {
